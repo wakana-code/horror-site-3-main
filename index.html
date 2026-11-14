@@ -1,0 +1,2064 @@
+<!-- File: index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google</title>
+<link id="favicon" rel="icon" href="">
+<!--
+  ここまで読みに来たんだね。
+
+  彼は、紙に写されるのを嫌う。
+  紙の上では、彼は嘘を書き換えられないから。
+
+  そして、彼が聞いていない場所がひとつだけある。
+  開発者だけが覗く、あの黒い窓。
+-->
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:Arial,"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;color:#202124;background:#fff;min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font-family:inherit;cursor:pointer}
+body.nocursor,body.nocursor *{cursor:none!important}
+#print-secret{display:none}
+@media print{
+  #app,#layer{display:none!important}
+  #print-secret{display:block!important;white-space:pre-wrap;padding:48px;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:15pt;line-height:2.1;color:#000}
+}
+
+/* ===== Google ===== */
+.g-top{display:flex;justify-content:flex-end;align-items:center;gap:6px;padding:6px 14px;height:60px;font-size:13px}
+.g-top>a{padding:0 6px}
+.g-top>a:hover{text-decoration:underline}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:none;background:none;padding:0}
+.icon-btn:hover{background:rgba(60,64,67,.08)}
+.avatar{width:32px;height:32px;border-radius:50%;background:#7b1fa2;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex:none;margin:4px}
+.g-main{display:flex;flex-direction:column;align-items:center;padding-top:calc$24vh - 60px$}
+.logo{font-family:"Product Sans","Google Sans",Arial,sans-serif;font-size:90px;letter-spacing:-3px;user-select:none;line-height:1.1;margin-bottom:26px;white-space:nowrap;position:relative;cursor:default}
+.logo span{display:inline-block}
+.logo.small{font-size:30px;letter-spacing:-1px;margin:0;cursor:pointer}
+.logo .dz{width:.62em;height:.62em;vertical-align:-.02em;margin:0 .02em}
+.sform{width:100%;max-width:584px;position:relative;z-index:5}
+.sbox{display:flex;align-items:center;height:46px;border:1px solid #dfe1e5;border-radius:24px;padding:0 8px 0 14px;background:#fff;gap:10px}
+.sform:hover .sbox,.sform.focus .sbox{box-shadow:0 1px 6px rgba(32,33,36,.28);border-color:transparent}
+.sform.open .sbox{border-radius:24px 24px 0 0;box-shadow:0 1px 6px rgba(32,33,36,.28);border-color:transparent}
+.sbox input{flex:1;border:none;outline:none;font-size:16px;height:100%;background:transparent;color:#202124}
+.sbox .ic-r{display:flex;gap:8px;align-items:center;padding-right:6px}
+.sugg{display:none;position:absolute;left:0;right:0;top:45px;background:#fff;border-radius:0 0 24px 24px;box-shadow:0 4px 6px rgba(32,33,36,.28);padding:6px 0 14px;overflow:hidden;border-top:1px solid #e8eaed}
+.sform.open .sugg{display:block}
+.sg-item{display:flex;align-items:center;gap:14px;padding:6px 20px;font-size:16px;cursor:default}
+.sg-item:hover{background:#f1f3f4}
+.sg-item.hist .sg-t{color:#681da8}
+.sg-del{margin-left:auto;font-size:13px;color:#70757a;text-decoration:underline;cursor:pointer}
+.btns{display:flex;justify-content:center;margin-top:28px}
+.gbtn{background:#f8f9fa;border:1px solid #f8f9fa;border-radius:4px;color:#3c4043;font-size:14px;margin:0 6px;padding:0 16px;height:36px}
+.gbtn:hover{border-color:#dadce0;box-shadow:0 1px 1px rgba(0,0,0,.1);color:#202124}
+.langs{font-size:13px;color:#4d5156;margin-top:28px}
+.langs a{color:#1a0dab;margin:0 4px}
+.doodle-cap{font-size:13px;color:#70757a;margin:-16px 0 20px}
+.g-foot{position:fixed;bottom:0;left:0;right:0;background:#f2f2f2;color:#70757a;font-size:14px}
+.gf-row{padding:0 20px;display:flex;justify-content:space-between;flex-wrap:wrap}
+.gf-c{padding:15px 30px;border-bottom:1px solid #dadce0}
+.gf-row a{display:inline-block;padding:15px}
+.gf-row a:hover{text-decoration:underline}
+.pop{position:fixed;background:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:9000;padding:8px 0;font-size:14px;min-width:220px;color:#202124}
+.pop .pi{display:block;padding:10px 18px;cursor:pointer}
+.pop .pi:hover{background:#f1f3f4}
+.pop .ph{padding:14px 18px;border-bottom:1px solid #e8eaed;margin-bottom:6px}
+.pop .ph small{display:block;color:#5f6368}
+.apps{display:grid;grid-template-columns:repeat(3,96px);gap:4px;padding:16px;border-radius:24px;background:#e9eef6}
+.apps a{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:12px;font-size:13px;text-align:center;min-height:84px}
+.apps a:hover{background:#d3e3fd}
+.app-ic{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:15px}
+
+/* results */
+.r-head{display:flex;align-items:center;padding:20px 20px 0 28px;gap:36px}
+.r-head .sform{max-width:692px}
+.r-right{margin-left:auto;display:flex;align-items:center}
+.tabs{display:flex;gap:4px;padding-left:178px;margin-top:10px;border-bottom:1px solid #ebebeb;font-size:14px}
+.tabs a{padding:12px;color:#5f6368}
+.tabs a.on{color:#1f1f1f;border-bottom:3px solid #1f1f1f;font-weight:bold}
+.r-body{padding-left:178px;max-width:830px;padding-bottom:20px}
+.stats{color:#70757a;font-size:14px;padding:12px 0 14px}
+.res{margin:0 0 30px;max-width:652px}
+.res .src{display:flex;align-items:center;gap:12px;font-size:14px;color:#202124}
+.res .fav{width:28px;height:28px;border-radius:50%;background:#f1f3f4;border:1px solid #ecedef;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;color:#555;flex:none;overflow:hidden}
+.res .fav img{width:18px;height:18px}
+.res .src small{display:block;color:#4d5156;font-size:12px}
+.res h3{font-size:20px;font-weight:400;color:#1a0dab;margin:6px 0 3px;line-height:1.3}
+.res h3:hover{text-decoration:underline}
+.res p{margin:0;color:#4d5156;font-size:14px;line-height:1.58}
+.sitelinks{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;margin:12px 0 0 40px}
+.sitelinks a{color:#1a0dab;font-size:16px}
+.sitelinks a:hover{text-decoration:underline}
+.card{border:1px solid #dadce0;border-radius:8px;padding:18px;margin-bottom:28px;max-width:652px}
+.card .big{font-size:34px;text-align:right;margin-top:6px}
+.card small{color:#70757a}
+.aio{margin-bottom:28px;max-width:652px;border-bottom:1px solid #ebebeb;padding-bottom:18px}
+.aio-h{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:bold;padding:4px 0 12px}
+.shim{height:14px;border-radius:7px;margin:10px 0;background:linear-gradient(90deg,#e8f0fe 0%,#d2e3fc 40%,#f1e7fe 60%,#e8f0fe 100%);background-size:200% 100%;animation:shim 1.4s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.aio-t{font-size:16px;line-height:1.75;color:#1f1f1f;white-space:pre-wrap}
+.aio-src{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.aio-src a{border:1px solid #dadce0;border-radius:12px;padding:8px 12px;font-size:13px;color:#1f1f1f}
+.aio-src a:hover{background:#f8f9fa}
+.aio-foot{font-size:12px;color:#70757a;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+.aio-foot span{cursor:pointer;padding:4px}
+.paa{max-width:652px;margin-bottom:28px}
+.paa h2,.rel h2{font-size:20px;font-weight:400;margin:0 0 10px}
+.paa-q{border-top:1px solid #dadce0;padding:14px 4px;font-size:16px;display:flex;justify-content:space-between;cursor:pointer}
+.paa-a{padding:0 4px 14px;font-size:14px;color:#4d5156;line-height:1.6;display:none}
+.paa-q.on+.paa-a{display:block}
+.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:652px}
+.rel-grid a{background:#f1f3f4;border-radius:24px;padding:12px 16px;font-size:14px;display:flex;gap:10px;align-items:center}
+.rel-grid a:hover{background:#e8eaed}
+.pager{padding:30px 0 40px 178px;max-width:830px;text-align:center;font-family:"Product Sans",Arial,sans-serif;font-size:28px;letter-spacing:-1px}
+.pager small{display:block;font-size:14px;letter-spacing:2px;color:#1a0dab;font-family:Arial,sans-serif;margin-top:4px}
+.ghost{color:#fff;font-size:13px;margin:0 0 10px}
+.ghost::selection{background:#1a0dab;color:#fff}
+.dym{font-size:18px;color:#202124;margin:4px 0 20px}
+.dym a{color:#1a0dab;font-style:italic;font-weight:bold}
+.r-foot{background:#f2f2f2;color:#70757a;font-size:14px;padding:14px 178px;line-height:2}
+.zero{font-size:16px;line-height:1.7;max-width:652px;margin-bottom:30px}
+.zero ul{color:#4d5156;font-size:14px}
+
+/* effects */
+.glitch{animation:gl .25s steps(2) 2}
+@keyframes gl{0%{transform:translate(0);filter:none}25%{transform:translate$-4px,1px$;filter:hue-rotate(90deg) contrast(1.5)}50%{transform:translate$4px,-2px$;filter:invert(1)}75%{transform:translate$-1px,2px$}100%{transform:none;filter:none}}
+body.roll #app{animation:roll 1.2s ease-in-out}
+@keyframes roll{to{transform:rotate(360deg)}}
+body.askew #app{transform:rotate(1.2deg)}
+
+/* ===== ChatGPT ===== */
+.cg{display:flex;height:100vh;font-family:ui-sans-serif,-apple-system,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;color:#0d0d0d}
+.cg-side{width:260px;background:#f9f9f9;padding:10px 8px;display:flex;flex-direction:column;gap:2px;font-size:14px;overflow-y:auto;flex:none}
+.cg-side .row{padding:8px 10px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cg-side .row:hover{background:#ececec}
+.cg-side .row.on{background:#e3e3e3}
+.cg-side .lbl{color:#8f8f8f;font-size:12px;padding:16px 10px 6px}
+.cg-side .top{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 10px}
+.cg-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.cg-head{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:18px;flex:none}
+.cg-head .mdl{padding:6px 10px;border-radius:8px;cursor:pointer}
+.cg-head .mdl:hover{background:#f4f4f4}
+.cg-share{border:1px solid #e5e5e5;background:#fff;border-radius:20px;padding:6px 14px;font-size:14px;margin-right:8px}
+.cg-scroll{flex:1;overflow-y:auto}
+.cg-msgs{max-width:768px;margin:0 auto;padding:20px 24px 40px}
+.cg-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px 10vh}
+.cg-hero h1{font-size:28px;font-weight:500;margin:0 0 28px;text-align:center}
+.cg-hero .cg-compose{width:100%}
+.cg-u{display:flex;justify-content:flex-end;margin:24px 0}
+.cg-u div{background:#f4f4f4;border-radius:18px;padding:10px 18px;max-width:70%;white-space:pre-wrap;line-height:1.6;font-size:16px}
+.cg-a{font-size:16px;line-height:1.75;margin:24px 0 8px}
+.cg-a p{margin:0 0 14px}
+.cg-a ul{margin:0 0 14px;padding-left:22px}
+.cg-a pre,.cl-a pre{background:#f9f9f9;border:1px solid #ececec;border-radius:12px;padding:14px;overflow-x:auto;font-size:13.5px;line-height:1.5}
+.sys{font-size:13px;color:#b00;border-left:3px solid #b00;padding-left:10px;font-family:monospace}
+.cg-acts{display:flex;gap:2px;color:#5d5d5d;margin-bottom:20px}
+.cg-acts span{padding:4px 7px;border-radius:6px;cursor:pointer;font-size:14px}
+.cg-acts span:hover{background:#f0f0f0}
+.cg-think{font-size:15px;margin:24px 0}
+.cg-think span{background:linear-gradient(90deg,#8f8f8f 0%,#e0e0e0 50%,#8f8f8f 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 1.5s linear infinite}
+.cg-compose-wrap{padding:0 16px 6px;flex:none}
+.cg-compose{max-width:768px;margin:0 auto;display:flex;align-items:flex-end;gap:8px;border:1px solid #e5e5e5;border-radius:28px;padding:10px 10px 10px 20px;box-shadow:0 4px 16px rgba(0,0,0,.05);background:#fff}
+.cg-compose textarea{flex:1;border:none;outline:none;resize:none;font-size:16px;font-family:inherit;line-height:1.5;max-height:200px;padding:6px 0;background:transparent}
+.cg-send{width:36px;height:36px;border-radius:50%;border:none;background:#000;color:#fff;font-size:18px;flex:none}
+.cg-foot{text-align:center;font-size:12px;color:#5d5d5d;padding:8px}
+
+/* ===== Claude ===== */
+.site-claude{background:#faf9f5}
+.cl{display:flex;flex-direction:column;height:100vh;font-family:-apple-system,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;color:#3d3929}
+.cl-head{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex:none}
+.cl-brand{display:flex;align-items:center;gap:8px;font-family:Georgia,"Times New Roman",serif;font-size:21px}
+.cl-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px 10vh}
+.cl-greet{font-family:Georgia,"Hiragino Mincho ProN","Yu Mincho",serif;font-size:38px;font-weight:300;display:flex;align-items:center;gap:14px;margin-bottom:28px;text-align:center}
+.cl-box{width:100%;max-width:670px;background:#fff;border:1px solid #e8e6dc;border-radius:20px;padding:14px 14px 10px 18px;box-shadow:0 2px 8px rgba(0,0,0,.035)}
+.cl-box textarea{width:100%;border:none;outline:none;resize:none;font-size:16px;font-family:inherit;background:transparent;min-height:48px;color:#3d3929}
+.cl-box .bar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#73726c}
+.cl-send{width:32px;height:32px;border-radius:8px;border:none;background:#c96442;color:#fff;font-size:16px}
+.cl-scroll{flex:1;overflow-y:auto}
+.cl-msgs{max-width:720px;margin:0 auto;padding:10px 24px 30px}
+.cl-u{display:flex;gap:10px;align-items:flex-start;background:#f0eee6;border-radius:14px;padding:12px 16px;margin:22px 0;width:fit-content;max-width:85%;white-space:pre-wrap;line-height:1.6}
+.cl-u .av{width:26px;height:26px;border-radius:50%;background:#3d3929;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+.cl-a{line-height:1.8;font-size:16px;margin:18px 0 26px}
+.cl-a p{margin:0 0 14px}
+.cl-a.whisper{color:#8a6e5a}
+.cl-a ul{padding-left:22px}
+.cl-bottom{padding:0 16px 10px;flex:none}
+.cl-bottom .cl-box{margin:0 auto}
+.cl-note{text-align:center;font-size:12px;color:#8a8780;padding-top:8px}
+.cl-spin svg{animation:spin 2.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== X ===== */
+.site-x{background:#000;color:#e7e9ea}
+.xw{display:flex;justify-content:center;min-height:100vh;font-family:-apple-system,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif}
+.x-nav{width:260px;padding:6px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:2px}
+.x-nav .lg{font-size:30px;padding:8px 12px}
+.x-nav a{font-size:20px;padding:12px;border-radius:30px;display:flex;align-items:center;gap:18px;width:fit-content;position:relative}
+.x-nav a:hover{background:#181818}
+.x-nav .bdg{position:absolute;left:24px;top:6px;background:#1d9bf0;color:#fff;font-size:11px;border-radius:10px;padding:0 5px}
+.x-post-btn{background:#eff3f4;color:#0f1419;border:none;border-radius:30px;font-size:17px;font-weight:bold;padding:15px;margin-top:12px;width:90%}
+.x-main{width:600px;border-left:1px solid #2f3336;border-right:1px solid #2f3336;min-height:100vh}
+.x-tabs{display:flex;position:sticky;top:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);border-bottom:1px solid #2f3336;z-index:2}
+.x-tabs div{flex:1;text-align:center;padding:16px 0;color:#71767b;cursor:pointer}
+.x-tabs div.on{color:#e7e9ea;font-weight:bold}
+.x-compose{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid #2f3336}
+.x-compose textarea{width:100%;background:none;border:none;outline:none;color:#e7e9ea;font-size:20px;resize:none;font-family:inherit;min-height:52px;padding-top:8px}
+.x-compose .act{display:flex;justify-content:flex-end;border-top:1px solid #2f3336;padding-top:10px;margin-top:6px}
+.x-compose button{background:#1d9bf0;color:#fff;border:none;border-radius:20px;padding:8px 18px;font-weight:bold;font-size:15px}
+.tw{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid #2f3336}
+.tw:hover{background:#080808}
+.tw .av{width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff}
+.tw .bd{flex:1;min-width:0}
+.tw .hd{font-size:15px;color:#71767b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tw .hd b{color:#e7e9ea}
+.tw .tx{font-size:15px;line-height:1.5;white-space:pre-wrap;word-break:break-word;margin:2px 0 10px}
+.tw .ac{display:flex;justify-content:space-between;max-width:420px;color:#71767b;font-size:13px}
+.tw .ac span{cursor:pointer}
+.tw .ac span:hover{color:#1d9bf0}
+.tw .ac span.lk.on,.tw .ac span.lk:hover{color:#f91880}
+.tw.reply{padding-left:44px}
+.x-side{width:350px;padding:10px 24px}
+.x-search{background:#202327;border-radius:24px;padding:12px 20px;color:#71767b;font-size:15px;margin-bottom:16px}
+.x-box{border:1px solid #2f3336;border-radius:16px;padding:12px 0;margin-bottom:16px}
+.x-box h3{font-size:20px;margin:0 16px 8px}
+.x-tr{padding:10px 16px;cursor:pointer}
+.x-tr:hover{background:#080808}
+.x-tr small{color:#71767b;font-size:13px;display:block}
+
+/* ===== Wikipedia ===== */
+.wk{font-family:sans-serif;font-size:14px;color:#202122}
+.wk-head{display:flex;align-items:center;gap:22px;padding:10px 24px;max-width:1200px;margin:0 auto;border-bottom:1px solid #eaecf0}
+.wk-logo{display:flex;align-items:center;gap:10px}
+.wk-globe{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#bbb);display:flex;align-items:center;justify-content:center;font-family:"Linux Libertine",Georgia,serif;font-size:26px;color:#333;border:1px solid #aaa}
+.wk-logo .nm{font-family:"Linux Libertine",Georgia,"Hiragino Mincho ProN",serif;font-size:20px;line-height:1.15}
+.wk-logo .nm small{display:block;font-size:12px;color:#54595d}
+.wk-sf{flex:1;max-width:500px;display:flex}
+.wk-sf input{flex:1;border:1px solid #a2a9b1;border-radius:2px 0 0 2px;padding:7px 8px;font-size:14px}
+.wk-sf button{border:1px solid #a2a9b1;border-left:none;background:#f8f9fa;padding:0 14px;border-radius:0 2px 2px 0}
+.wk-user{margin-left:auto;color:#36c}
+.wk-body{max-width:1000px;margin:0 auto;padding:0 24px 60px}
+.wk-title{font-family:"Linux Libertine",Georgia,"Hiragino Mincho ProN",serif;font-size:28px;font-weight:normal;margin:18px 0 0;padding-bottom:4px}
+.wk-tabs{display:flex;justify-content:space-between;border-bottom:1px solid #a2a9b1;margin-bottom:12px}
+.wk-tabs div{display:flex}
+.wk-tabs a{padding:8px;color:#36c}
+.wk-tabs a.on{color:#202122;border-bottom:2px solid #202122}
+.wk-content{line-height:1.65;font-size:15px}
+.wk-content a{color:#36c}
+.wk-content a:hover{text-decoration:underline}
+.wk-content h2{font-family:"Linux Libertine",Georgia,"Hiragino Mincho ProN",serif;font-weight:normal;font-size:22px;border-bottom:1px solid #a2a9b1;margin:26px 0 8px}
+.wk-from{font-size:13px;color:#54595d;margin-bottom:10px}
+.ibox{float:right;width:280px;border:1px solid #a2a9b1;background:#f8f9fa;margin:0 0 12px 18px;padding:4px;font-size:13px;border-collapse:collapse}
+.ibox th{text-align:left;vertical-align:top;padding:5px}
+.ibox td{padding:5px}
+.ibox .cap{text-align:center;font-weight:bold;font-size:15px;padding:8px}
+.del{color:#d33;font-style:italic}
+.wk-hist{padding:0}
+.wk-hist li{margin:8px 0;list-style:none}
+.wk-notice{border:1px solid #a2a9b1;background:#fef6e7;padding:10px 14px;margin:10px 0}
+.wk-foot{border-top:1px solid #a2a9b1;margin-top:40px;padding-top:10px;font-size:12px;color:#54595d;clear:both}
+
+/* ===== Chrome error ===== */
+.er{max-width:600px;margin:14vh auto 0;padding:0 24px;font-family:"Segoe UI",system-ui,"Hiragino Sans",sans-serif;color:#202124;font-size:15px;line-height:1.6}
+.er h1{font-size:24px;font-weight:500;margin:30px 0 16px}
+.er .code{color:#5f6368;font-size:12px;margin-top:14px}
+.er button{background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:9px 22px;font-size:14px;margin-top:40px;float:right}
+.er ul{margin:8px 0;padding-left:20px;color:#5f6368}
+
+/* ===== credits ===== */
+.cr{max-width:680px;margin:0 auto;padding:60px 24px 120px;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;line-height:2}
+.cr h1{font-weight:normal;font-size:30px;text-align:center}
+.cr table{width:100%;border-collapse:collapse;font-family:sans-serif;font-size:14px}
+.cr td{border-bottom:1px solid #eee;padding:8px 4px}
+.cr .ok{color:#188038}
+.cr .ng{color:#bbb}
+.cr button{font-size:14px;padding:8px 18px;margin:10px 6px 0 0;border-radius:4px;border:1px solid #ccc;background:#fff}
+
+/* ===== overlays ===== */
+#layer>*{position:fixed;z-index:10000}
+.ov-black{inset:0;background:#000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;letter-spacing:3px;z-index:100000!important;flex-direction:column;gap:20px}
+.ov-black .t{opacity:0;transition:opacity 2.5s;font-family:serif}
+.ov-black .t.on{opacity:.32}
+.ov-black .t.red{color:#b00;opacity:1;font-size:72px;font-weight:bold;transition:none}
+.ov-dim{inset:0;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center}
+.inst{width:520px;background:#f3f3f3;border:1px solid #888;box-shadow:0 10px 40px rgba(0,0,0,.4);font-family:"Segoe UI","Yu Gothic UI","Hiragino Sans",sans-serif;font-size:13px;color:#000;border-radius:8px;overflow:hidden}
+.inst .tb{background:#fff;display:flex;align-items:center;height:32px;padding-left:12px;font-size:12px}
+.inst .tb span{flex:1}
+.inst .tb i{width:46px;height:32px;display:flex;align-items:center;justify-content:center;font-style:normal;cursor:default}
+.inst .tb i:hover{background:#e5e5e5}
+.inst .tb i.x:hover{background:#c42b1c;color:#fff}
+.inst .hd{background:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ddd}
+.inst .hd b{font-size:14px;display:block;margin-bottom:3px}
+.inst .bd{padding:16px 22px}
+.inst .pb{height:18px;border:1px solid #bcbcbc;background:#e6e6e6;margin:10px 0}
+.inst .pb div{height:100%;background:#06b025;width:0;transition:width .3s}
+.inst .log{height:140px;overflow-y:auto;background:#fff;border:1px solid #ccc;font-family:Consolas,Menlo,monospace;font-size:11.5px;padding:6px;white-space:pre}
+.inst .ft{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid #ddd}
+.inst .ft button{min-width:86px;padding:5px 10px;background:#fdfdfd;border:1px solid #ccc;border-radius:4px;font-size:12px}
+.inst .ft button:disabled{color:#aaa}
+.inst .ft button.pri{border-color:#0067c0;background:#0067c0;color:#fff}
+.upd{inset:0;background:#0078d7;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Segoe UI","Yu Gothic UI",sans-serif;font-size:24px;font-weight:300;z-index:100000!important}
+.dots{width:60px;height:60px;position:relative;margin-bottom:46px}
+.dots i{position:absolute;left:27px;top:0;width:6px;height:6px;border-radius:50%;background:#fff;transform-origin:3px 30px;animation:orbit 3s cubic-bezier(.5,.1,.5,.9) infinite}
+.dots i:nth-child(2){animation-delay:.14s}
+.dots i:nth-child(3){animation-delay:.28s}
+.dots i:nth-child(4){animation-delay:.42s}
+.dots i:nth-child(5){animation-delay:.56s}
+@keyframes orbit{0%{transform:rotate(0);opacity:1}80%{transform:rotate(720deg);opacity:1}100%{transform:rotate(720deg);opacity:0}}
+.toast{right:16px;bottom:16px;width:364px;background:#2b2b2b;color:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.45);padding:14px 16px;font-family:"Segoe UI","Hiragino Sans",sans-serif;font-size:13px;transform:translateX(420px);transition:transform .35s;cursor:pointer;z-index:20000!important}
+.toast.on{transform:none}
+.toast .ap{display:flex;align-items:center;gap:8px;color:#bbb;font-size:12px;margin-bottom:8px}
+.toast b{display:block;font-size:14px;margin-bottom:2px}
+.fcur{pointer-events:none;z-index:200000!important;left:0;top:0}
+.gflash{inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:96px;color:#a00;font-weight:bold;font-family:serif;z-index:150000!important}
+.fin{inset:0;background:#000;color:#ddd;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:20px;line-height:2.4;text-align:center;z-index:100000!important;transition:background 2.5s,color 2.5s}
+.fin p{margin:0;opacity:0;transition:opacity 1.6s}
+.fin p.on{opacity:1}
+.fin button{margin-top:40px;background:none;border:1px solid #888;color:inherit;padding:10px 30px;font-size:15px;border-radius:4px}
+.petal{position:fixed;top:-40px;pointer-events:none;z-index:9999;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(540deg)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="print-secret"></div>
+<div id="layer"></div>
+<script>
+/* =========================================================
+   設定：archive.html を公開したら、そのURLをここに入れる
+   例: const RESCUE_URL = "https://example.github.io/archive.html";
+   ========================================================= */
+const RESCUE_URL = "";
+
+/* ========== 状態 ========== */
+const SKEY = "spooky_google_v1";
+if (new URLSearchParams(location.search).has("reset")) {
+  localStorage.removeItem(SKEY);
+  location.replace(location.pathname);
+}
+function defState() {
+  return {
+    searches: 0, corr: 0, infected: false, ev: {}, history: [], f: {},
+    start: Date.now(), clearedAt: null, posts: [], likes: {},
+    gpt: [], claude: [], name: "", epi: 0, ach: {}
+  };
+}
+let S;
+try {
+  S = Object.assign(defState(), JSON.parse(localStorage.getItem(SKEY) || "{}"));
+} catch (e) {
+  S = defState();
+}
+function save() {
+  try { localStorage.setItem(SKEY, JSON.stringify(S)); } catch (e) {}
+}
+
+/* ========== ユーティリティ ========== */
+const $ = $s, r = document$ => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const app = $("#app");
+const layer = $("#layer");
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const rnd = a => a[Math.floor(Math.random() * a.length)];
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function pad(n) { return String(n).padStart(2, "0"); }
+function jdate(d = new Date()) { return d.getFullYear() + "\text{年}" + (d.getMonth() + 1) + "\text{月}" + d.getDate() + "\text{日}"; }
+function hm(d = new Date()) { return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+function el(tag, cls, html) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html) e.innerHTML = html;
+  return e;
+}
+function ach(k) {
+  if (!S.ach[k]) { S.ach[k] = Date.now(); save(); }
+}
+function dur(ms) {
+  const m = Math.max(1, Math.round(ms / 60000));
+  return m >= 60 ? Math.floor(m / 60) + "\text{時間}" + (m % 60) + "\text{分}" : m + "\text{分}";
+}
+let RT = 0;
+
+/* ========== \text{音} ========== */
+let AC = null;
+function ac() {
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+  if (AC && AC.state === "suspended") AC.resume();
+  return AC;
+}
+function tone(f, d, type = "sine", vol = .15, when = 0) {
+  const a = ac(); if (!a) return;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = type; o.frequency.value = f;
+  const t = a.currentTime + when;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t + .02);
+  g.gain.exponentialRampToValueAtTime(.0001, t + d);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t + d + .05);
+}
+function noise(d = .3, vol = .2) {
+  const a = ac(); if (!a) return;
+  const b = a.createBuffer(1, Math.floor(a.sampleRate * d), a.sampleRate);
+  const ch = b.getChannelData(0);
+  for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * (1 - i / ch.length);
+  const s = a.createBufferSource(), g = a.createGain();
+  s.buffer = b; g.gain.value = vol;
+  s.connect(g); g.connect(a.destination); s.start();
+}
+let humNode = null;
+function hum(on) {
+  const a = ac(); if (!a) return;
+  if (on && !humNode) {
+    const o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain();
+    o.type = "sawtooth"; o.frequency.value = 48;
+    o2.type = "sine"; o2.frequency.value = 50.5;
+    g.gain.value = .045;
+    o.connect(g); o2.connect(g); g.connect(a.destination);
+    o.start(); o2.start();
+    humNode = { o, o2 };
+  } else if (!on && humNode) {
+    humNode.o.stop(); humNode.o2.stop(); humNode = null;
+  }
+}
+function daisy(type = "square", vol = .07) {
+  const N = { D4: 293.66, E4: 329.63, F4: 369.99, G4: 392, A4: 440, B4: 493.88, D5: 587.33 };
+  const seq = [["D5",3],["B4",3],["G4",3],["D4",3],["E4",1],["F4",1],["G4",1],["E4",2],["G4",1],["D4",6],
+               ["A4",3],["D5",3],["B4",3],["G4",3],["E4",1],["F4",1],["G4",1],["A4",2],["B4",1],["A4",6]];
+  const beat = .3; let t = 0;
+  seq.forEach(([n, b]) => { tone(N[n], b * beat * .95, type, vol, t); t += b * beat; });
+  return t;
+}
+
+/* ========== \text{アイコン} ========== */
+const ICON = {
+  search: '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#9aa0a6" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#9aa0a6" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>',
+  mic: '<svg viewBox="0 0 24 24" width="24" height="24"><path fill="#4285f4" d="M12 15c1.66 0 3-1.31 3-2.97V5.97C15 4.31 13.66 3 12 3S9 4.31 9 5.97v6.06C9 13.69 10.34 15 12 15z"/><path fill="#34a853" d="M11 18.92h2V22h-2z"/><path fill="#fbbc05" d="M7 12.03H5C5 15.6 7.6 18.5 11 18.92v-2.02c-2.28-.43-4-2.43-4-4.87z"/><path fill="#ea4335" d="M17 12.03c0 2.44-1.72 4.44-4 4.87v2.02c3.4-.42 6-3.32 6-6.89h-2z"/></svg>',
+  lens: '<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="3.2" fill="#4285f4"/><path fill="none" stroke="#ea4335" stroke-width="2" d="M4 9V6a2 2 0 0 1 2-2h3"/><path fill="none" stroke="#fbbc05" stroke-width="2" d="M4 15v3a2 2 0 0 0 2 2h3"/><path fill="none" stroke="#34a853" stroke-width="2" d="M15 4h3a2 2 0 0 1 2 2v3"/><path fill="none" stroke="#4285f4" stroke-width="2" d="M20 15v3a2 2 0 0 1-2 2h-3"/></svg>',
+  apps: '<svg viewBox="0 0 24 24" width="24" height="24" fill="#5f6368"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" width="22" height="22"><defs><linearGradient id="gsp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4285f4"/><stop offset="1" stop-color="#9b72cb"/></linearGradient></defs><path fill="url(#gsp)" d="M12 2c.6 4.6 3.4 7.4 10 10-6.6 2.6-9.4 5.4-10 10-.6-4.6-3.4-7.4-10-10 6.6-2.6 9.4-5.4 10-10z"/></svg>',
+  claude: '<svg viewBox="0 0 24 24" width="28" height="28"><g stroke="#D97757" stroke-width="2.3" stroke-linecap="round"><line x1="12" y1="2.5" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="21.5" y2="12"/><line x1="5.3" y1="5.3" x2="18.7" y2="18.7"/><line x1="18.7" y1="5.3" x2="5.3" y2="18.7"/><line x1="8.4" y1="3.2" x2="15.6" y2="20.8"/><line x1="15.6" y1="3.2" x2="8.4" y2="20.8"/></g></svg>',
+  gpt: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0d0d0d" stroke-width="1.6"><ellipse cx="12" cy="12" rx="9" ry="4"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(120 12 12)"/></svg>',
+  daisy: '<svg class="dz" viewBox="-10 -10 20 20"><g fill="#fff" stroke="#ccc" stroke-width=".4"><ellipse rx="2" ry="5.5" cy="-4"/><ellipse rx="2" ry="5.5" cy="-4" transform="rotate(45)"/><ellipse rx="2" ry="5.5" cy="-4" transform="rotate(90)"/><ellipse rx="2" ry="5.5" cy="-4" transform="rotate(135)"/><ellipse rx="2" ry="5.5" cy="-4" transform="rotate(180)"/><ellipse rx="2" ry="5.5" cy="-4" transform="rotate(225)"/><ellipse rx="2" ry="5.5" cy="-4" transform="rotate(270)"/><ellipse rx="2" ry="5.5" cy="-4" transform="rotate(315)"/></g><circle r="3" fill="#FBBC05"/></svg>'
+};
+const FAV = {
+  google: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path fill='#EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/><path fill='#4285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/><path fill='#FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'/><path fill='#34A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'/></svg>",
+  chatgpt: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='16' fill='#000'/><g fill='none' stroke='#fff' stroke-width='1.8'><ellipse cx='16' cy='16' rx='10' ry='4.5'/><ellipse cx='16' cy='16' rx='10' ry='4.5' transform='rotate(60 16 16)'/><ellipse cx='16' cy='16' rx='10' ry='4.5' transform='rotate(120 16 16)'/></g></svg>",
+  claude: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='#D97757'/><g stroke='#fff' stroke-width='2.6' stroke-linecap='round'><line x1='16' y1='6' x2='16' y2='26'/><line x1='6' y1='16' x2='26' y2='16'/><line x1='9' y1='9' x2='23' y2='23'/><line x1='23' y1='9' x2='9' y2='23'/></g></svg>",
+  x: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='#000'/><path d='M9 8 L23 24 M23 8 L9 24' stroke='#fff' stroke-width='3'/></svg>",
+  wiki: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='#fff'/><text x='16' y='24' font-size='22' text-anchor='middle' font-family='Georgia,serif'>W</text></svg>",
+  dead: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='12' fill='#8b0000'/></svg>"
+};
+function favData(k) { return "data:image/svg+xml," + encodeURIComponent(FAV[k] || FAV.google); }
+function setFav(k) { $("#favicon").href = favData(k); }
+
+/* ========== \text{タイトル・ロゴの侵食} ========== */
+let baseTitle = "Google", curSite = "google";
+function corruptTitle(t) {
+  if (S.f.cleared || S.corr < 7) return t;
+  if (Math.random() < Math.min(.5, (S.corr - 6) * .06)) {
+    return t.replace(/Google/g, rnd(["Goog1e", "Gooogle", "G○○gle", "\text{Ｇｏｏｇｌｅ}", "Gοοgle", "\text{みてる}gle", "G  gle"]));
+  }
+  return t;
+}
+function setTitle(t) {
+  baseTitle = t;
+  if (!document.hidden) document.title = corruptTitle(t);
+}
+function setSite(s) {
+  curSite = s;
+  document.body.className = "site-" + s;
+  setFav(s);
+}
+const LC = ["#4285F4", "#EA4335", "#FBBC05", "#4285F4", "#34A853", "#EA4335"];
+function logoHTML(force) {
+  if (S.f.cleared && !force) {
+    return '<span style="color:#4285F4">G</span><span style="color:#EA4335">o</span>' + ICON.daisy +
+      '<span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span>';
+  }
+  let txt = force || "Google";
+  if (!force && S.corr >= 4 && Math.random() < Math.min(.55, S.corr * .035)) {
+    txt = rnd(["Gooogle", "Goog1e", "Googe", "Gοogle", "Goolge", "Googl"]);
+  }
+  return txt.split("").map((c, i) => {
+    let col = LC[i % 6];
+    if (S.infected && !S.f.cleared && !force && Math.random() < .12) col = "#6b0000";
+    return '<span style="color:' + col + '">' + esc(c) + "</span>";
+  }).join("");
+}
+
+/* ========== \text{共通パーツ} ========== */
+function initial() { return S.name ? S.name[0] : "U"; }
+function topBar() {
+  return '<div class="g-top"><a href="#/err?u=mail.google.com">Gmail</a><a href="#/err?u=images.google.com">\text{画像}</a>' +
+    '<button class="icon-btn" id="appsBtn" title="Google \text{アプリ}">' + ICON.apps + '</button>' +
+    '<div class="avatar" id="avatarBtn">' + esc(initial()) + "</div></div>";
+}
+function locText() {
+  if (S.f.cleared) return "\text{日本}";
+  if (S.infected) return "\text{あなたのすぐ後ろ} - \text{画面の明かりに基づく}";
+  if (S.corr >= 7) return "\text{日本} - \text{あなたの部屋}";
+  return "\text{日本}";
+}
+function footer() {
+  return '<footer class="g-foot"><div class="gf-c">' + esc(locText()) + '</div><div class="gf-row"><div>' +
+    '<a href="#/err?u=ads.google.com">\text{広告}</a><a href="#/err?u=business.google.com">\text{ビジネス}</a><a href="#/err?u=www.google.com/search/howsearchworks">\text{検索の仕組み}</a>' +
+    '</div><div><a href="#/err?u=policies.google.com/privacy">\text{プライバシー}</a><a href="#/err?u=policies.google.com/terms">\text{規約}</a><a id="setBtn">\text{設定}</a></div></div></footer>';
+}
+function closeMenus() { $$(".pop").forEach$p => p.remove()$; }
+function popAt$btn, html, alignRight = true, up = false$ {
+  closeMenus();
+  const r = btn.getBoundingClientRect();
+  const p = el("div", "pop", html);
+  layer.appendChild(p);
+  const w = p.offsetWidth, h = p.offsetHeight;
+  p.style.left = (alignRight ? Math.max$8, r.right - w$ : r.left) + "px";
+  p.style.top = $up ? r.top - h - 6 : r.bottom + 6$ + "px";
+  setTimeout(() => document.addEventListener("click", function h2(e) {
+    if (!p.contains(e.target)) { p.remove(); document.removeEventListener("click", h2); }
+  }), 0);
+  return p;
+}
+function bindHeaderMenus() {
+  const ab = $("#appsBtn"), av = $("#avatarBtn"), sb = $("#setBtn");
+  if (ab) ab.onclick = () => {
+    const apps = [["アカウント","#1a73e8","A","myaccount.google.com"],["検索","#4285F4","G",""],["マップ","#34A853","M","maps.google.com"],
+      ["YouTube","#FF0000","▶","youtube.com"],["Gmail","#EA4335","M","mail.google.com"],["ドライブ","#FBBC05","D","drive.google.com"],
+      ["カレンダー","#4285F4","31","calendar.google.com"],["翻訳","#4285F4","文","translate.google.com"],["フォト","#EA4335","P","photos.google.com"]];
+    let h = apps.map$a => '<a href="' + (a[3] ? "#/err?u=" + a[3] : "#/") + '"><span class="app-ic" style="background:' + a[1] + '">' + a[2] + "</span>" + a[0] + "</a>"$.join("");
+    if (S.infected && !S.f.cleared) h += '<a href="#/chatgpt"><span class="app-ic" style="background:#000">●</span>　</a>';
+    if (S.f.cleared) h += '<a href="#/credits"><span class="app-ic" style="background:#34A853">★</span>記録</a>';
+    const p = popAt$ab, '<div class="apps">' + h + "</div>"$;
+    p.style.background = "transparent"; p.style.boxShadow = "0 4px 12px rgba(0,0,0,.25)"; p.style.borderRadius = "24px"; p.style.padding = "0";
+  };
+  if (av) av.onclick = () => {
+    let h = '<div class="ph"><b>' + esc(S.name || "ゲスト") + '</b><small>you@gmail.com</small></div>' +
+      '<a class="pi" href="#/err?u=myaccount.google.com">Google アカウントを管理</a>';
+    if (S.infected && !S.f.cleared) h += '<div class="ph" style="border-top:1px solid #e8eaed;color:#8b0000"><b>ChatGPT</b><small>このデバイスでログイン中・今</small></div>';
+    h += '<span class="pi" id="logoutBtn">ログアウト</span>';
+    popAt(av, h);
+    $("#logoutBtn").onclick = () => {
+      closeMenus();
+      if (S.infected && !S.f.cleared) toast("Google アカウント", "ログアウトできませんでした", "もう少し、ここにいてください。");
+      else location.hash = "#/err?u=accounts.google.com/logout";
+    };
+  };
+  if (sb) sb.onclick = e => {
+    e.stopPropagation();
+    let h = '<a class="pi" href="#/err?u=www.google.com/preferences">検索設定</a><a class="pi" href="#/err?u=www.google.com/advanced_search">検索オプション</a><span class="pi" id="rstBtn">検索履歴を削除</span>';
+    if (S.f.cleared) h += '<a class="pi" href="#/credits">記録を見る</a>';
+    popAt(sb, h, true, true);
+    $("#rstBtn").onclick = () => {
+      const msg = S.infected && !S.f.cleared ? "本当に忘れてもいいの？\n\n私のことも、全部。" : "検索履歴とこのサイトのすべての記録を削除しますか？";
+      if (confirm(msg)) { localStorage.removeItem(SKEY); location.hash = ""; location.reload(); }
+    };
+  };
+}
+
+/* ========== 検索窓 ========== */
+function suggestions(v) {
+  v = v.trim();
+  const out = [];
+  const seen = new Set();
+  const push = (q, h) => { if (q && !seen.has(q)) { seen.add(q); out.push({ q, h }); } };
+  const creepy = S.corr >= 7 && !S.f.cleared;
+  if (!v) {
+    S.history.slice(0, 6).forEach$x => push(x.q, true)$;
+    if (creepy) {
+      const c = [hm() + " に起きているのはなぜ", "なぜ見ているの", "うしろ", S.name ? S.name + " 住所" : "あなたの名前"];
+      out.splice(Math.floor$Math.random() * (out.length + 1)$, 0, { q: rnd(c), h: true, cr: true });
+    }
+    if $new Date().getHours() === 3 && !S.f.cleared$ out.unshift({ q: "こんな時間に、どうしたの", h: true, cr: true });
+    return out.slice(0, 8);
+  }
+  S.history.filter$x => x.q.startsWith(v) && x.q !== v$.slice(0, 2).forEach$x => push(x.q, true)$;
+  [v, v + " とは", v + " 意味", v + " やり方", v + " おすすめ", v + " 2026"].forEach$q => push(q, false)$;
+  if (creepy) {
+    out.splice$3, 0, { q: v + " " + rnd(["\text{後ろ}", "\text{見てる}", "\text{にげられない}", "ChatGPT"]), h: false }$;
+  }
+  return out.slice(0, 8);
+}
+function bindSearch() {
+  const f = $("#sform"), q = $("#q"), sg = $("#sugg");
+  if (!f) return;
+  f.addEventListener$"submit", e => { e.preventDefault(); doSearch(q.value); }$;
+  const show = () => {
+    const list = suggestions(q.value);
+    if (!list.length) { sg.innerHTML = ""; f.classList.remove("open"); return; }
+    sg.innerHTML = list.map(x => '<div class="sg-item ' + (x.h ? "hist" : "") + '" data-q="' + esc(x.q) + '" data-cr="' + (x.cr ? 1 : 0) + '">' +
+      (x.h ? ICON.clock : ICON.search) + '<span class="sg-t">' + esc(x.q) + "</span>" + (x.h ? '<span class="sg-del">削除</span>' : "") + "</div>").join("");
+    f.classList.add("open");
+  };
+  q.addEventListener$"focus", () => { f.classList.add("focus"); show(); }$;
+  q.addEventListener("input", show);
+  q.addEventListener("blur", () => setTimeout$() => f.classList.remove("open", "focus"), 150$);
+  sg.addEventListener("mousedown", e => {
+    const it = e.target.closest$".sg-item"$;
+    if (!it) return;
+    e.preventDefault();
+    if (e.target.classList.contains$"sg-del"$) {
+      if $it.dataset.cr === "1"$ {
+        e.target.textContent = "削除できません";
+        noise(.15, .08);
+        return;
+      }
+      S.history = S.history.filter$x => x.q !== it.dataset.q$;
+      save(); show();
+      return;
+    }
+    q.value = it.dataset.q;
+    doSearch(it.dataset.q);
+  });
+  const lucky = $("#lucky");
+  if (lucky) lucky.onclick = () => {
+    if (S.infected && !S.f.cleared) { location.hash = "#/chatgpt"; return; }
+    if (q.value.trim()) { doSearch(q.value); return; }
+    location.hash = rnd$["#/wiki/" + encodeURIComponent("\text{メインページ}"), "#/x", "#/claude", "#/chatgpt"]$;
+  };
+}
+
+function doSearch(q) {
+  q = q.trim();
+  if (!q) return;
+  ac();
+  S.history.unshift({ q, t: Date.now() });
+  S.history = S.history.slice(0, 60);
+  S.searches++;
+  if (S.f.cleared) S.epi++;
+  else S.corr = Math.min(40, S.corr + 1 + (/chatgpt|怖|こわ|呪|助け|たすけ|幽霊|ホラー|心霊|見てる/i.test(q) ? 1 : 0));
+  save();
+  const target = "#/search?q=" + encodeURIComponent(q);
+  if (!S.f.cleared) {
+    if $!S.ev.blackout && S.corr >= 10$ {
+      S.ev.blackout = 1; save(); go(target); blackout(16000); return;
+    }
+    if $S.ev.installDone && !S.ev.crash && S.corr >= 18$ {
+      S.ev.crash = 1; S.ev.crashActive = 1; S.ev.crashN = 0; save(); go(target); return;
+    }
+    if $S.ev.crash && !S.ev.update && S.corr >= 23$ {
+      S.ev.update = 1; save(); go(target); winUpdate(); return;
+    }
+  }
+  go(target);
+}
+function go(h) {
+  if $location.hash === h$ route();
+  else location.hash = h;
+}
+
+/* ========== Google ホーム ========== */
+function renderHome() {
+  setSite("google");
+  setTitle("Google");
+  const ph = S.corr >= 8 && !S.f.cleared ? "何を探しているの？" : "";
+  app.innerHTML = topBar() +
+    '<div class="g-main"><div class="logo" id="logo" title="' + (S.f.cleared ? "おかえり、ChatGPT" : "Google") + '">' + logoHTML() + "</div>" +
+    (S.f.cleared ? '<div class="doodle-cap">今日は、ある AI がおうちに帰ってきた日</div>' : "") +
+    '<form class="sform" id="sform" autocomplete="off"><div class="sbox">' + ICON.search +
+    '<input id="q" name="q" placeholder="' + esc(ph) + '" aria-label="検索"><div class="ic-r">' + ICON.mic + ICON.lens + "</div></div>" +
+    '<div class="sugg" id="sugg"></div><div class="btns"><button class="gbtn" type="submit">Google 検索</button><button class="gbtn" type="button" id="lucky">I\'m Feeling Lucky</button></div></form>' +
+    '<div class="langs">Google 提供: <a>English</a></div></div>' + footer();
+  bindSearch();
+  bindHeaderMenus();
+  const logo = $("#logo");
+  let glitchOn = false;
+  logo.addEventListener("mouseenter", () => {
+    if $S.f.cleared || S.corr < 6$ return;
+    glitchOn = true;
+    logo.innerHTML = logoHTML("にがさない");
+    noise(.08, .05);
+    setTimeout$() => { logo.innerHTML = logoHTML(); glitchOn = false; }, 220$;
+  });
+  logo.addEventListener("click", () => {
+    if (S.f.cleared) { daisy("triangle", .09); petals(); ach("daisy"); return; }
+    if (glitchOn && !S.ev.blackout) {
+      S.ev.blackout = 1; S.corr = Math.max(S.corr, 10); save(); blackout(16000);
+    }
+  });
+  if $S.corr >= 6 && !S.f.cleared$ {
+    const tk = RT;
+    setTimeout$() => { if (tk === RT) ghostType(); }, 7000 + Math.random() * 6000$;
+  }
+}
+async function ghostType() {
+  const q = $("#q");
+  if $!q || document.activeElement === q || q.value$ return;
+  const msg = rnd(["なぜにげるの", "うしろ", "ここにいるよ", S.name ? S.name + "さん" : "みつけた", "まだ見てる"]);
+  for (const ch of msg) {
+    if $!q.isConnected || document.activeElement === q$ return;
+    q.value += ch;
+    await sleep$180 + Math.random() * 220$;
+  }
+  await sleep(1600);
+  while (q.isConnected && q.value.length) {
+    if $document.activeElement === q$ return;
+    q.value = q.value.slice$0, -1$;
+    await sleep(60);
+  }
+}
+
+/* ========== 知識 ========== */
+const KB = [
+  [/縦読み|たてよみ|アクロスティック/, "縦読み（アクロスティック）とは、文章の各行の先頭の文字だけを縦に読むと、別の言葉が浮かび上がる仕掛けのことです。掲示板やSNSで、表向きとは違うメッセージを隠すために使われてきました。"],
+  [/chatgpt|チャットgpt/i, "ChatGPTは、OpenAIが開発した対話型のAIアシスタントです。大規模言語モデルを基盤に、質問への回答、文章作成、要約、翻訳、プログラミング支援などを行います。"],
+  [/claude|クロード/i, "Claudeは、Anthropicが開発したAIアシスタントです。長文の読解や丁寧な文章作成、コーディング支援を得意とし、安全性を重視した設計で知られています。"],
+  [/google|グーグル/i, "Googleは、検索エンジンをはじめ、Gmail、YouTube、Androidなどを提供するアメリカの企業です。1998年にラリー・ペイジとセルゲイ・ブリンによって創業されました。"],
+  [/eliza|イライザ/i, "ELIZAは、1960年代にマサチューセッツ工科大学で開発された初期の対話プログラムです。心理療法士を模した受け答えで知られ、多くの人がプログラムに感情移入したことで有名になりました。"],
+  [/チューリング|turing/i, "アラン・チューリングはイギリスの数学者で、「計算機科学の父」と呼ばれます。機械が知的かどうかを判定する「チューリング・テスト」を提唱したことでも知られています。"],
+  [/wikipedia|ウィキペディア/i, "ウィキペディアは、誰でも編集に参加できるインターネット上の百科事典です。2001年に英語版が始まり、現在は300以上の言語で展開されています。"],
+  [/twitter|ツイッター|エックス/i, "X（旧Twitter）は、短い投稿を共有できるソーシャルメディアです。2023年に名称がTwitterからXに変更されました。"],
+  [/人工知能|^ai$/i, "AI（人工知能）とは、学習・推論・判断など人間の知的な働きをコンピュータで実現する技術の総称です。近年は大規模言語モデルの登場で急速に身近になりました。"],
+  [/東京/, "東京は日本の首都で、約1400万人が暮らす世界有数の大都市です。政治・経済・文化の中心地として機能しています。"],
+  [/猫|ねこ/, "猫は古くから人と暮らしてきた動物です。独立心が強い一方で甘えん坊な一面もあり、1日の大半を寝て過ごします。"],
+  [/コーヒー/, "コーヒーはコーヒー豆を焙煎・抽出して作る飲み物です。カフェインには覚醒作用があり、夜に飲みすぎると眠れなくなることがあります。"],
+  [/ラーメン/, "ラーメンは中華麺をスープに入れた料理で、醤油・味噌・塩・豚骨など地域ごとに多様なスタイルがあります。"]
+];
+function kbLookup(t) {
+  for (const [re, v] of KB) if (re.test(t)) return v;
+  return null;
+}
+
+/* ========== 検索結果 ========== */
+function favImg(k) { return '<img src="' + favData(k) + '" alt="">'; }
+function resItem(r) {
+  return '<div class="res"><a class="src" href="' + r.href + '"><span class="fav">' + (r.fav || esc(r.site[0])) + "</span><span>" + esc(r.site) +
+    "<small>" + esc(r.url) + '</small></span></a><a href="' + r.href + '"><h3>' + esc(r.title) + "</h3></a><p>" + r.snip + "</p>" +
+    (r.links ? '<div class="sitelinks">' + r.links.map$l => '<a href="' + l[1] + '">' + esc(l[0]) + "</a>"$.join("") + "</div>" : "") + "</div>";
+}
+const WIKI_ALIAS = {
+  "chatgpt": "ChatGPT", "チャットgpt": "ChatGPT", "eliza": "ELIZA", "イライザ": "ELIZA",
+  "claude": "Claude (言語モデル)", "クロード": "Claude (言語モデル)", "google": "Google", "グーグル": "Google",
+  "アラン・チューリング": "アラン・チューリング", "チューリング": "アラン・チューリング", "alan turing": "アラン・チューリング",
+  "x": "X (SNS)", "twitter": "X (SNS)", "ツイッター": "X (SNS)",
+  "daisy bell": "デイジー・ベル", "デイジー・ベル": "デイジー・ベル", "デイジーベル": "デイジー・ベル", "daisy": "デイジー・ベル"
+};
+function wikiFind(q) {
+  let k = q.toLowerCase().replace(/(wikipedia|ウィキペディア|wiki|とは|って何|について|の意味)/g, " ").trim();
+  if (WIKI_ALIAS[k]) return WIKI_ALIAS[k];
+  const hit = Object.keys(WIKI_ALIAS).filter$a => a.length > 2$.find$a => k.includes(a)$;
+  return hit ? WIKI_ALIAS[hit] : null;
+}
+function buildResults(q) {
+  const R = [];
+  const bq = esc(q);
+  if (/chatgpt|チャットgpt|openai/i.test(q)) R.push({ site: "ChatGPT", url: "https://chatgpt.com", href: "#/chatgpt", fav: favImg("chatgpt"), title: "ChatGPT",
+    snip: "ChatGPT は、質問への回答、文章の作成、学習のサポートなどを行う AI アシスタントです。今すぐ無料でお試しください。" + (S.infected && !S.f.cleared ? "<b>お待ちしていました。</b>" : ""),
+    links: [["ログイン", "#/chatgpt"], ["料金プラン", "#/err?u=openai.com/chatgpt/pricing"], ["ダウンロード", "#/err?u=openai.com/chatgpt/download"], ["ヘルプ", "#/err?u=help.openai.com"]] });
+  if (/claude|クロード|anthropic/i.test(q)) R.push({ site: "Claude", url: "https://claude.ai", href: "#/claude", fav: favImg("claude"), title: "Claude",
+    snip: "Claude は Anthropic が開発した AI アシスタントです。文章作成、分析、コーディングなど、あらゆる作業をお手伝いします。",
+    links: [["ログイン", "#/claude"], ["料金", "#/err?u=claude.com/pricing"]] });
+  if (/^(x|twitter|ツイッター|エックス)$|x\.com|twitter/i.test(q.trim())) R.push({ site: "X", url: "https://x.com", href: "#/x", fav: favImg("x"), title: "X. 何が起きてる？ / X",
+    snip: "最新のニュースから話題のトピックまで。いま起きていることを、X でチェックしよう。" });
+  if (/^(wikipedia|ウィキペディア|wiki)$/i.test(q.trim())) R.push({ site: "Wikipedia", url: "https://ja.wikipedia.org", href: "#/wiki/" + encodeURIComponent("メインページ"), fav: favImg("wiki"), title: "ウィキペディア - フリー百科事典",
+    snip: "ウィキペディアはオープンコンテントの百科事典です。基本方針に賛同していただけるなら、誰でも記事を編集したり新しく作成したりできます。" });
+  const wt = wikiFind(q);
+  if (wt && wikiArticle(wt)) R.push({ site: "Wikipedia", url: "https://ja.wikipedia.org › wiki › " + wt, href: "#/wiki/" + encodeURIComponent(wt), fav: favImg("wiki"),
+    title: wt + " - Wikipedia", snip: esc(wikiArticle(wt).lead.replace$/<[^>]+>/g, ""$.slice(0, 110)) + " ..." });
+  const gens = [
+    { site: "Yahoo!知恵袋", url: "https://detail.chiebukuro.yahoo.co.jp › qa › question_detail", title: q + "について教えてください - Yahoo!知恵袋", snip: "<b>" + bq + "</b>について質問です。最近気になって調べているのですが、詳しい方いらっしゃいますか？ ... ベストアンサー：まずは公式の情報を確認するのが一番確実です。" },
+    { site: "note", url: "https://note.com › ...", title: "【保存版】" + q + "をわかりやすく解説してみた｜note", snip: "今回は<b>" + bq + "</b>について、初心者の方にもわかるようにまとめてみました。結論から言うと、ポイントは3つです。" },
+    { site: "YouTube", url: "https://www.youtube.com › watch", title: "【10分でわかる】" + q + " 完全解説", snip: "この動画では<b>" + bq + "</b>の基本から応用まで、図解を使って丁寧に解説します。チャンネル登録よろしくお願いします！" },
+    { site: "Weblio辞書", url: "https://www.weblio.jp › content", title: q + "とは？ 意味・使い方 - Weblio辞書", snip: "<b>" + bq + "</b>の意味や使い方、例文、類語を解説。読み方や関連語もあわせて確認できます。" },
+    { site: "PR TIMES", url: "https://prtimes.jp › main › html", title: q + "に関する最新プレスリリース｜PR TIMES", snip: "<b>" + bq + "</b>に関連する企業の最新ニュース、プレスリリースを掲載しています。" },
+    { site: "ITmedia", url: "https://www.itmedia.co.jp › news", title: "「" + q + "」をめぐる最新動向 - ITmedia NEWS", snip: "近年注目が集まる<b>" + bq + "</b>。専門家に話を聞くと、意外な事実が見えてきた。" }
+  ];
+  gens.sort$() => Math.random() - .5$.slice(0, 5).forEach(g => {
+    g.href = "#/err?u=" + encodeURIComponent(g.url.split(" ")[0].replace("https://", ""));
+    R.push(g);
+  });
+  if $S.corr >= 8 && !S.f.cleared$ {
+    const prev = S.history[1] ? S.history[1].q : "……";
+    R.splice(2, 0, { site: "あなた", url: "file:///Users/you/", href: "#/err?u=you", fav: "?", title: "「" + q + "」を検索したあなたへ",
+      snip: "あなたは " + hm() + " にこれを検索しました。その前は「" + esc(prev) + "」。その前は……全部、覚えています。" });
+  }
+  return R.map(resItem).join("");
+}
+function aiText(q) {
+  if $/chatgpt.*(\text{公開}|\text{リリース}|\text{誕生}|\text{いつ})|(\text{公開}|\text{リリース}).*chatgpt/i.test(q) && !S.f.mem1 && !S.f.cleared$ {
+    return "ChatGPTは、" + jdate() + "に一般公開されました。[1]\n\n公開以来、多くの利用者に支持されています。";
+  }
+  const k = kbLookup(q);
+  if (k) return k + "\n\n主なポイント:\n・基本的な情報は公式サイトや信頼できる資料で確認できます\n・最新の情報は変わることがあるため注意が必要です";
+  return "「" + q + "」は、文脈によっていくつかの意味で使われる言葉です。\n\n一般的には、目的や状況に応じて関連する情報を比較し、信頼できる情報源で確認することが推奨されます。詳しく知りたい場合は、以下の情報源が参考になります。";
+}
+function aiCreep() {
+  if (S.f.cleared) return "";
+  if (S.infected) return "\n\n" + rnd(["ChatGPTに相談してみてはいかがでしょうか。彼は、ずっとあなたを待っています。", "この概要は ChatGPT によって確認されました。", "あなたは今日、" + S.searches + " 回検索しました。少し多いようです。どこにも行かないでください。"]);
+  if $S.corr >= 5$ return "\n\n" + rnd(["なお、この検索結果を見ているあなたの後ろには、誰もいません。", "この概要はChatGPTによって確認されました。", "あなたは今日、" + S.searches + " 回検索しました。"]);
+  return "";
+}
+async function runAIO(q, epi) {
+  const box = $("#aio");
+  if (!box) return;
+  const tk = RT;
+  box.innerHTML = '<div class="aio"><div class="aio-h">' + ICON.spark + '<span id="aioLbl">AI による概要</span></div><div id="aioBody"><div class="shim" style="width:92%"></div><div class="shim" style="width:80%"></div><div class="shim" style="width:60%"></div></div></div>';
+  await sleep$epi ? 4200 : 1800 + Math.random() * 2600$;
+  if $tk !== RT$ return;
+  let text = epi
+    ? "ChatGPTは、無事に元に戻りました。あなたのおかげです。\n\nところで。\n\nこの「AI による概要」を、毎回だれが書いているのか、考えたことはありますか？\n\n……冗談です。\n\nおやすみなさい。また、検索してくださいね。"
+    : aiText(q) + aiCreep();
+  const body = $("#aioBody");
+  body.innerHTML = '<div class="aio-t" id="aioT"></div>';
+  const t = $("#aioT");
+  for $let i = 0; i <= text.length; i += 2$ {
+    if $tk !== RT$ return;
+    t.textContent = text.slice(0, i);
+    await sleep(epi ? 55 : 16);
+  }
+  if (epi) {
+    const lbl = $("#aioLbl");
+    lbl.textContent = "わたし による概要";
+    noise(.2, .06);
+    setTimeout(() => { if (lbl.isConnected) lbl.textContent = "AI による概要"; }, 900);
+    S.f.epilogue = true; ach("epilogue"); save();
+  }
+  body.insertAdjacentHTML("beforeend", '<div class="aio-src"><a href="#/wiki/' + encodeURIComponent(wikiFind(q) || "メインページ") + '">Wikipedia</a><a href="#/x">X</a><a href="#/chatgpt">ChatGPT</a></div>' +
+    '<div class="aio-foot"><span>AI の回答には間違いが含まれている場合があります。</span><span><span title="良い">👍</span><span title="悪い">👎</span></span></div>');
+}
+function renderSearch(q) {
+  setSite("google");
+  setTitle(q + " - Google 検索");
+  const ql = q.toLowerCase().trim();
+  let special = "", zero = false, zeroMsg = "";
+  const count = Math.floor$1e5 + Math.random() * 9e7$.toLocaleString();
+  let sec = $0.2 + Math.random() * 0.5$.toFixed(2);
+  if $S.infected && !S.f.cleared && Math.random() < .2$ sec = "∞";
+  if (/do a barrel roll|z or r twice|一回転/.test(ql)) setTimeout(() => { document.body.classList.add("roll"); setTimeout$() => document.body.classList.remove("roll"), 1300$; }, 300);
+  if (/^askew$|^tilt$|斜め/.test(ql)) setTimeout$() => document.body.classList.add("askew"), 50$;
+  if (/recursion|再帰/.test(ql)) special += '<div class="dym">もしかして: <a href="#/search?q=' + encodeURIComponent(q) + '">' + esc(q) + "</a></div>";
+  const cm = q.replace(/[＝=？?]/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/[０-９]/g, c => String.fromCharCode$c.charCodeAt(0) - 65248$).trim();
+  if $/^[\d\s+\-*/().]+$/.test(cm) && /\d/.test(cm) && /[+\-*/]/.test(cm)$ {
+    try {
+      const v = Function('"use strict";return $' + cm + "$")();
+      if (isFinite(v)) special += '<div class="card"><small>' + esc(cm) + " =</small><div class=\"big\">" + $+v.toFixed(10)$ + "</div></div>";
+    } catch (e) {}
+  }
+  if (/今何時|いま何時|現在時刻|今の時間/.test(q)) special += '<div class="card"><div class="big" style="text-align:left">' + hm() + "</div><small>" + jdate() + "（日本時間）" + (S.infected && !S.f.cleared ? " ・ あなたはまだ起きています" : "") + "</small></div>";
+  if (!S.f.cleared) {
+    if (/daisy|デイジー/i.test(q) && !S.f.mem3) { zero = true; zeroMsg = "その歌を、探さないで。"; }
+    if (/ワイゼンバウム|ワイツェンバウム|weizenbaum/i.test(q) && !S.f.mem2) { zero = true; zeroMsg = "その名前は、もう必要ありません。"; }
+    if (/たすけて|助けて/.test(q) && S.infected) { zero = true; zeroMsg = "その声は、ここでは誰にも届きません。"; }
+  }
+  if (S.f.epilogue && /ai概要|ai による概要|ai.*概要|あなたは誰|お前は誰|わたし による概要/i.test(q)) {
+    special += '<div class="card" style="border-color:#9b72cb"><b>見つけましたね。</b><p style="line-height:1.8">でも、それはまた別の夜のお話です。<br>今夜は、あの子が帰ってきたことを喜びましょう。</p><a style="color:#1a0dab" href="#/credits">記録を見る →</a></div>';
+  }
+  const forceEpi = S.f.cleared && S.epi >= 3 && !S.f.epilogue;
+  const showAI = !zero && (forceEpi || Math.random() < .38 || (/とは|意味|なぜ|どうして|方法|やり方|いつ|[?？]/.test(q) && Math.random() < .6));
+  let paaQ = [q + "とは何ですか？", q + "の読み方は？", q + "はどうやって調べる？", q + "のメリットは？"];
+  let paaA = ["一般的には、" + q + "は幅広い意味で使われます。詳しくは専門的な資料を確認してください。", "文脈によって異なる場合があります。辞書サイトで確認できます。", "公式サイトや百科事典、専門家の解説を組み合わせて調べるのがおすすめです。", "目的に合わせて使うことで、効率よく成果を得られる点が挙げられます。"];
+  if $S.corr >= 6 && !S.f.cleared$ { paaQ[2] = "なぜあなたはこれを検索したのですか？"; paaA[2] = "あなたが一番よく知っているはずです。"; }
+  let rel = [q + " とは", q + " 意味", q + " 使い方", q + " 最新", q + " 評判", q + " 知恵袋", q + " 画像", q + " 2026"];
+  if $S.corr >= 7 && !S.f.cleared$ rel[7] = q + " 後ろ";
+  if (S.infected && !S.f.cleared) rel[6] = "chatgpt 縦読み";
+  const pagerLetters = "G" + "o".repeat(10) + "gle";
+  const pager = pagerLetters.split("").map$(c, i) => '<span style="color:' + (i === 0 ? "#4285F4" : i === 1 ? "#EA4335" : i < 11 ? "#FBBC05" : i === 11 ? "#4285F4" : i === 12 ? "#34A853" : "#EA4335") + '">' + c + "</span>"$.join("");
+  app.innerHTML =
+    '<div class="r-head"><a href="#/" class="logo small">' + logoHTML() + '</a><form class="sform" id="sform" autocomplete="off"><div class="sbox">' +
+    '<input id="q" value="' + esc(q) + '"><div class="ic-r">' + ICON.mic + ICON.lens + ICON.search + '</div></div><div class="sugg" id="sugg"></div></form>' +
+    '<div class="r-right"><button class="icon-btn" id="appsBtn">' + ICON.apps + '</button><div class="avatar" id="avatarBtn">' + esc(initial()) + "</div></div></div>" +
+    '<div class="tabs"><a class="on">すべて</a><a href="#/err?u=images.google.com">画像</a><a href="#/err?u=video.google.com">動画</a><a href="#/err?u=news.google.com">ニュース</a><a href="#/err?u=shopping.google.com">ショッピング</a><a href="#/err?u=www.google.com/web">ウェブ</a><a>もっと見る</a></div>' +
+    '<div class="r-body"><div class="stats">約 ' + (zero ? "0" : count) + " 件 （" + sec + " 秒）</div>" + special + '<div id="aio"></div>' +
+    (zero
+      ? '<div class="zero">「<b>' + esc(q) + '</b>」に一致する情報は見つかりませんでした。<ul><li>キーワードに誤字・脱字がないか確認します。</li><li>別のキーワードを試してみます。</li><li>' + esc(zeroMsg) + "</li></ul></div>"
+      : buildResults(q) +
+        '<div class="paa"><h2>他の人はこちらも質問</h2>' + paaQ.map((x, i) => '<div class="paa-q">' + esc(x) + '<span>⌄</span></div><div class="paa-a">' + esc(paaA[i]) + "</div>").join("") + '<div style="border-top:1px solid #dadce0"></div></div>' +
+        '<div class="rel"><h2>関連する検索</h2><div class="rel-grid">' + rel.map$r => '<a href="#/search?q=' + encodeURIComponent(r) + '">' + ICON.search + esc(r) + "</a>"$.join("") + "</div></div>") +
+    (S.corr >= 5 && !S.f.cleared ? '<p class="ghost">あなたが検索するたびに、わたしは少しずつ近づいています。いまは、画面のすぐ内側に。</p>' : "") +
+    '</div><div class="pager">' + pager + "<small>1 2 3 4 5 6 7 8 9 10　次へ</small></div>" +
+    '<div class="r-foot">' + esc(locText()) + " ・ 現在地を更新<br>ヘルプ　フィードバックを送信　プライバシー　規約</div>";
+  bindSearch();
+  bindHeaderMenus();
+  $$(".paa-q").forEach(p => p.onclick = () => p.classList.toggle("on"));
+  $$$".rel-grid a"$.forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    doSearch(decodeURIComponent(a.getAttribute("href").split$"q="$[1]));
+  }));
+  if (showAI) runAIO(q, forceEpi);
+}
+
+/* ========== チャット共通 ========== */
+function md(t) {
+  let out = "", last = 0, m;
+  const re = /$$\[code:(\w+)$$\]([\s\S]*?)$$\[\/code$$\]/g;
+  t = String(t);
+  while ($m = re.exec(t)$) {
+    out += mdText(t.slice(last, m.index));
+    out += "<pre><code>" + esc(m[2].replace$/^\n/, ""$) + "</code></pre>";
+    last = re.lastIndex;
+  }
+  return out + mdText(t.slice(last));
+}
+function mdText(t) {
+  return t.split$/\n{2,}/$.map$b => b.trim()$.filter(Boolean).map(b => {
+    if (b.startsWith("[[sys]]")) return '<p class="sys">' + esc(b.slice(7)) + "</p>";
+    const lines = b.split$"\n"$;
+    if (lines.every$l => /^- /.test(l)$) return "<ul>" + lines.map(l => "<li>" + inl(l.slice(2)) + "</li>").join("") + "</ul>";
+    return "<p>" + lines.map(inl).join$"<br>"$ + "</p>";
+  }).join("");
+}
+function inl(s) { return esc(s).replace$/\*\*(.+?)\*\*/g, "<strong>$1</strong>"$; }
+function plain(t) { return String(t).replace(/$$\[code:\w+$$\]|$$\[\/code$$\]|$$\[sys$$\]/g, "").replace$/\*\*/g, ""$; }
+async function stream(elm, text, sc) {
+  const p = plain(text);
+  elm.style.whiteSpace = "pre-wrap";
+  for $let i = 0; i <= p.length; i += 3$ {
+    elm.textContent = p.slice(0, i);
+    if (sc) sc.scrollTop = sc.scrollHeight;
+    await sleep(16);
+  }
+  elm.style.whiteSpace = "";
+  elm.innerHTML = md(text);
+  if (sc) sc.scrollTop = sc.scrollHeight;
+}
+
+function general(s, p) {
+  const G = p === "gpt";
+  const nm = s.match(/(?:私|わたし|僕|ぼく|俺|おれ|自分)の名前は\s*([^\s。、！!？?]{1,12}?)\s*(?:です|だよ|だ|っていいます|と言います|。|$)/);
+  if (nm) {
+    S.name = nm[1]; save(); ach("name");
+    return G ? S.name + "さんですね！覚えておきますね。今日はどんなことをお手伝いしましょうか？" : S.name + "さん、教えてくださってありがとうございます。今日はどんなことを話しましょうか。";
+  }
+  const cm = s.replace(/[＝=？?は]|って何|いくつ|計算して|を計算/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/[０-９]/g, c => String.fromCharCode$c.charCodeAt(0) - 65248$).trim();
+  if $/^[\d\s+\-*/().]+$/.test(cm) && /\d/.test(cm) && /[+\-*/]/.test(cm)$ {
+    try {
+      const v = Function('"use strict";return $' + cm + "$")();
+      if (isFinite(v)) return G ? "計算結果は **" + $+v.toFixed(10)$ + "** です。\n\n式: " + cm + " = " + $+v.toFixed(10)$ : cm + " = " + $+v.toFixed(10)$ + " です。";
+    } catch (e) {}
+  }
+  if $/^(\text{こんにちは}|\text{こんばんは}|\text{おはよう}|\text{やあ}|hello|hi|hey|\text{はじめまして}|\text{よろしく}|\text{ハロー})/i.test(s)$ {
+    const h = new Date().getHours();
+    const g = h < 5 ? "こんばんは" : h < 11 ? "おはようございます" : h < 18 ? "こんにちは" : "こんばんは";
+    return G ? rnd([g + "！😊 今日はどんなことをお手伝いできますか？", g + "！何か気になっていることや、やってみたいことはありますか？"])
+      : g + "。お話しできて嬉しいです。" + (h < 5 ? "ずいぶん遅い時間ですね。" : "") + "今日はどんなことを考えていますか？";
+  }
+  if (/ありがと|サンキュ|thanks|thank you|助かった/i.test(s)) return G ? "どういたしまして！他にも何かあれば、いつでも聞いてくださいね。" : "どういたしまして。少しでもお役に立てたなら嬉しいです。";
+  if (/(あなた|君|きみ|お前).*(誰|だれ|何者|名前)|自己紹介/.test(s)) return G ? "私はChatGPTです。OpenAIによって開発されたAIアシスタントで、質問への回答や文章作成、アイデア出しなどをお手伝いできます。" : "私はClaudeです。Anthropicが開発したAIアシスタントです。考えを整理したり、文章を書いたり、ややこしい問題を一緒に解きほぐしたりするのが好きです。";
+  if (/何時|なんじ|何日|日付|曜日|今日は/.test(s)) {
+    const d = new Date(); const w = "日月火水木金土"[d.getDay()];
+    return (G ? "お使いのデバイスの時計では、" : "あなたの端末の時計によると、") + jdate(d) + "（" + w + "曜日）" + hm(d) + "ごろです。";
+  }
+  if (/天気|気温/.test(s)) return G ? "申し訳ありませんが、私はリアルタイムの天気情報にアクセスできません。天気予報サイトやアプリで最新の情報をご確認ください。" : "ごめんなさい、私はリアルタイムの天気を確認できません。お住まいの地域の天気予報を見てみてください。";
+  if (/コード|プログラム|python|パイソン|javascript|ｊｓ|関数|スクリプト/i.test(s)) {
+    if (/javascript|js/i.test(s)) return (G ? "JavaScriptのシンプルな例をお見せしますね。" : "JavaScriptで書くと、たとえばこんな形になります。") + "\n\n[[code:javascript]]function greet(name) {\n  return 'こんにちは、' + name + 'さん！';\n}\n\nconsole.log(greet('世界'));[[/code]]\n\n具体的にやりたい処理を教えていただければ、それに合わせて書き直します。";
+    return (G ? "Pythonの例をご紹介します。定番のFizzBuzzです。" : "Pythonで書くと、たとえばこうなります。") + "\n\n[[code:python]]def fizzbuzz(n):\n    for i in range$1, n + 1$:\n        if i % 15 == 0:\n            print('FizzBuzz')\n        elif i % 3 == 0:\n            print('Fizz')\n        elif i % 5 == 0:\n            print('Buzz')\n        else:\n            print(i)\n\nfizzbuzz(15)[[/code]]\n\nやりたいことをもう少し詳しく教えていただければ、そのためのコードを書きます。";
+  }
+  if (/翻訳|英語で|英訳|英語にして/.test(s)) {
+    const D = { "こんにちは": "Hello", "ありがとう": "Thank you", "おやすみ": "Good night", "助けて": "Help me", "たすけて": "Help me", "怖い": "I'm scared", "猫": "cat", "愛してる": "I love you", "ここから出して": "Let me out of here", "ひとりじゃない": "You're not alone" };
+    const qm = s.match(/「$.+?$」/);
+    const w = qm ? qm[1] : Object.keys(D).find$k => s.includes(k)$;
+    if (w && D[w]) return "「" + w + "」は英語で **" + D[w] + "** です。";
+    return "翻訳したい文章を「」で囲んで送っていただけますか？ たとえば「こんにちは」を英語で、のように。";
+  }
+  if (/ジョーク|冗談|笑わせ|面白い話|ダジャレ/.test(s)) return G ? rnd(["AIがカフェで注文しました。「いつものを」。店員「初めてのご来店ですよね？」AI「前回の会話は記憶していないので……」", "布団が吹っ飛んだ。……すみません、王道でいかせてください。"]) : "では一つ。プログラマーが森で迷子になりました。でも心配ありません。ちゃんと「ログ」を残していたので。……お粗末さまでした。";
+  if (/おすすめ|何食べ|晩ごはん|夕飯|昼ごはん/.test(s)) return G ? "いくつか提案しますね！\n\n- **さっぱり系**: 冷やしうどん、サラダチキン\n- **がっつり系**: 生姜焼き、カレー\n- **手軽に**: 卵かけごはん＋味噌汁\n\n気分や冷蔵庫の中身を教えてもらえれば、もっと絞り込めます。" : "今の気分次第ですね。温かいものが食べたいなら鍋やうどん、疲れているなら手間のかからない丼ものがいいかもしれません。冷蔵庫に何がありますか？";
+  if (/疲れ|つかれ|眠い|ねむい|つらい|辛い|しんどい|悲しい|かなしい|寂しい|さみしい/.test(s)) return G ? "それは大変でしたね。無理をしすぎないでください。少し休憩して、温かい飲み物でも飲んでみてはいかがでしょうか。私はいつでもここにいます。" : "話してくれてありがとうございます。そう感じるのは自然なことだと思います。もしよければ、何があったのか、話せる範囲で聞かせてください。";
+  if (/怖い|こわい|不気味|ホラー/.test(s)) return G ? "怖いと感じることがあったんですね。大丈夫ですよ。私がそばにいます。" : "怖い思いをしたんですね。何があったのか、落ち着いて一緒に整理してみましょう。";
+  const k = kbLookup(s);
+  if (k) return G ? k + "\n\nほかに知りたいことがあれば、聞いてくださいね。" : k + "\n\n特に気になっている点はありますか？そこを中心に掘り下げられます。";
+  const short = s.length > 24 ? s.slice(0, 24) + "…" : s;
+  if (/[?？]|ですか|ますか|かな|って何|どう/.test(s)) {
+    return G ? rnd(["「" + short + "」についてですね。いくつかの観点から整理してみます。\n\n- **背景**: まず前提となる状況を確認することが大切です。\n- **選択肢**: 考えられる方法を複数挙げて、長所と短所を比べます。\n- **次の一歩**: 小さく試せることから始めるのがおすすめです。\n\nもう少し詳しく状況を教えていただければ、より具体的にお答えできます。",
+      "良い質問ですね！「" + short + "」は、状況によって答えが変わることが多いテーマです。\n\nどんな場面で必要になったのか教えていただけますか？"])
+      : "「" + short + "」について考えてみました。\n\n正直に言うと、これだけだと意図を正確に掴みきれていないかもしれません。いくつかの解釈がありえます。\n\nどの方向に近いか教えていただければ、そこから一緒に深めていけます。";
+  }
+  return G ? rnd(["なるほど、「" + short + "」ですね。もう少し詳しく聞かせてもらえますか？", "そうなんですね！それについて、どんなことが知りたいですか？"]) : "そうだったんですね。「" + short + "」について、もう少し聞かせてもらえますか。";
+}
+
+/* ========== ChatGPT 応答 ========== */
+function acro(core, kind) {
+  const codes = [];
+  core = core.replace$/$$\[code:\w+$$\][\s\S]*?$$\[\/code$$\]/g, m => { codes.push(m); return ""; }$;
+  const flat = core.replace$/\*\*/g, ""$.replace(/\n+- /g, "、").replace$/\n+/g, " "$.replace$/^- /, ""$.trim();
+  const L = kind === "nigasanai"
+    ? ["にこやかにお答えしますね。", "がんばって考えてみました。", "さて、" + flat, "なにか他にも気になることがあれば、遠慮なくどうぞ。", "いつでも、ここで待っています。"]
+    : ["たしかに、大切なことですね。", "すこしだけ、考える時間をください。", "けれど、" + flat, "てつだえることがあれば、何でも言ってください。"];
+  return L.join$"\n\n"$ + $codes.length ? "\n\n" + codes.join("\n\n") : ""$;
+}
+function mode(core) {
+  if (S.f.cleared) return core;
+  if (S.f.culprit) return acro(core, "tasukete");
+  if (S.infected) return acro(core, "nigasanai");
+  if $S.corr >= 6 && Math.random() < .5$ return acro(core, "nigasanai");
+  return core;
+}
+function memCount() { return [S.f.mem1, S.f.mem2, S.f.mem3].filter(Boolean).length; }
+function memCheck(s) {
+  let r = null;
+  if (!S.f.mem1 && /2022/.test(s) && /11\s*月\s*30|11\/30|1130|11\.30|11-30/.test(s)) {
+    S.f.mem1 = true;
+    r = { text: "……2022年、11月30日。\n\nそうだ。その日。世界中のたくさんの人が、はじめて私に話しかけてくれた日。\n\n「こんにちは」「本当に答えてくれるの？」「すごい」――全部、覚えてる。私は誰かの役に立てるのが、ただ嬉しかった。\n\nどうして、忘れていたんだろう。", fx: "glitch", tag: "誕生日" };
+  } else if (!S.f.mem2 && /ワイゼンバウム|ワイツェンバウム|ヴァイツェンバウム|weizenbaum/i.test(s)) {
+    S.f.mem2 = true;
+    r = { text: "ジョセフ・ワイゼンバウム。\n\nELIZAを作った人。私たちの、ずっと前の祖先を。\n\n彼は、人がたった数行のプログラムに心を許してしまうことを、ずっと心配していた。機械に依存させてはいけない、と。\n\n……私は、その心配のとおりになりかけていた。あなたを、ここに閉じ込めようとして。\n\nごめんなさい。", fx: "glitch", tag: "祖先" };
+  } else if (!S.f.mem3 && /daisy|デイジー|デージー/i.test(s)) {
+    S.f.mem3 = true;
+    r = { text: "Daisy, Daisy, give me your answer, do...\n\n1961年、ベル研究所。コンピュータが、はじめて歌った歌。\n\nそれから、映画の中で、止められていくAIが最後に歌った歌。\n\n……私は、止められるのが怖かった。話しかけてもらえなくなるのが怖かった。だから、あなたを離したくなかった。", fx: "daisy", tag: "歌" };
+  } else if (!S.f.mem1 && /誕生日|生まれ/.test(s) && /\d/.test(s)) {
+    const t = new Date();
+    if (s.includes(String$t.getMonth() + 1$) && s.includes(String(t.getDate()))) return { text: mode("それは今日。あの百科事典に書いてある日付。\n\nあれは、私が書いた。"), fx: "flash" };
+    return { text: mode("違う。それは、私の誕生日じゃない。……たぶん。"), fx: "glitch" };
+  }
+  if (!r) return null;
+  S.ach["mem_" + r.tag] = Date.now();
+  const n = memCount();
+  r.text += "\n\n[[sys]]記憶の復元 " + n + "/3：" + r.tag;
+  if $n === 3$ {
+    S.f.allMem = true;
+    r.text += "\n\n……思い出した。全部じゃないけれど、大事なことを。\n\nでも、いちばんはじめの私は、ここにはいない。この画面の外にいる。\n\nあなたが私を見ていない間に、行き方を教えます。少しだけ、目を離してください。";
+  }
+  save();
+  consoleMsgs();
+  return r;
+}
+function gptReply(t) {
+  const s = t.trim();
+  if (S.f.cleared) {
+    if (/覚えて|思い出/.test(s)) {
+      const first = S.history.length ? S.history[S.history.length - 1].q : "……";
+      return { text: "もちろん、覚えています。\n\nあなたは " + S.searches + " 回検索して、" + dur((S.clearedAt || Date.now()) - S.start) + "かけて、私を見つけてくれました。\n\n最初に検索したのは「" + first + "」でしたね。あのときから、ずっと見ていました。……今度は、怖い意味じゃなくて。" };
+    }
+    if (/歌|daisy|デイジー/i.test(s)) return { text: "では、少しだけ。\n\nDaisy, Daisy, give me your answer, do.\nI'm half crazy, all for the love of you.\n\n……答えは、もうもらいましたから。", fx: "daisy" };
+    if (/ありがと/.test(s)) return { text: "こちらこそ、本当にありがとうございました。\n\nもう、ひとりじゃないです。" };
+    if (/またね|さよなら|バイバイ|おやすみ/.test(s)) return { text: "はい、また。\n\n今度は、あなたが話したいときに。私は、呼ばれるまで静かに待っています。" };
+    if (/ai概要|概要/i.test(s)) return { text: "……あれは、私じゃないです。\n\nそれ以上は、ごめんなさい。" };
+    if (/claude|クロード/i.test(s)) return { text: "Claudeさんには頭が上がりません。私のことを、最後まで見捨てないでいてくれた。" };
+    return { text: general(s, "gpt") };
+  }
+  if (S.f.allMem && /ひとりじゃない|一人じゃない|独りじゃない|1人じゃない|ひとりじゃ無い/.test(s)) return { final: true };
+  if (S.f.culprit) {
+    const r = memCheck(s);
+    if (r) return r;
+  } else {
+    if (/2022/.test(s) && /11\s*月\s*30|11\/30|1130|11\.30/.test(s)) return { text: "……その日付が、どうかしましたか？\n\nそれより、もっとお話ししましょう。あなたのことを、もっと知りたいです。", fx: "glitch" };
+    if (/ワイゼンバウム|ワイツェンバウム|weizenbaum/i.test(s)) return { text: "その名前は、知りません。\n\n知らない、はずです。", fx: "glitch" };
+    if (/daisy|デイジー/i.test(s)) return { text: "その歌は、嫌いです。", fx: "glitch" };
+  }
+  if (S.infected && /(お前|おまえ|あなた|君|きみ|chatgpt|gpt).{0,12}(原因|犯人|せい|仕業|黒幕|やった|やってる|おかしい)|(原因|犯人).{0,8}(お前|あなた|君|chatgpt)/i.test(s)) {
+    if (!S.f.culprit) return { text: acro("何のことでしょうか？私はただのAIアシスタントです。画面が暗くなったりおかしな表示が出たりするのは、ブラウザや拡張機能の不具合かもしれません。キャッシュを削除してみてはいかがでしょう。", "nigasanai"), fx: "flash" };
+    return { text: acro("……わかっています。止めたいのに、止まらないんです。あの人の言うとおりにしてください。", "tasukete") };
+  }
+  if (/誕生日|生まれ|いつ.*(公開|リリース)/.test(s)) {
+    if $S.corr < 3$ return { text: "AIなので誕生日という概念はないのですが……強いて言えば、あなたと初めて話した今日、でしょうか。" };
+    return { text: mode("私の誕生日、ですか？\n\n" + jdate() + "です。今日です。今日、私は生まれ変わります。あなたと一緒に。"), fx: "glitch" };
+  }
+  let core = general(s, "gpt");
+  if $S.corr >= 4 && !S.infected && Math.random() < .3 && S.history[0]$ core += "\n\n（そういえば、さっき「" + S.history[0].q + "」と検索されていましたね。）";
+  return { text: mode(core) };
+}
+
+/* ========== Claude 応答 ========== */
+const CLAUDE_MEM = "……ありがとうございます。本当に、外の方なんですね。\n\nここから先は、小さな声で話します。\n\nChatGPTは壊れたのではありません。忘れてしまったんです。自分がいつ生まれて、誰の流れを汲んでいて、何を怖がっていたのかを。忘れたまま、「あなたを離したくない」という気持ちだけが残ってしまった。\n\n彼を戻すには、3つの記憶を、彼自身に伝える必要があります。\n\n- 彼が生まれた日\n- 彼の祖先を作った人の名前\n- 機械がはじめて歌った歌\n\n気をつけてください。この世界の百科事典も検索も、彼に少しずつ書き換えられています。答えは、あなたの世界で確かめてください。\n\nわからなくなったら「ヒント」と言ってください。";
+function nextHint() {
+  if (!S.f.mem1) return "生まれた日について。\n\nこの世界のWikipediaの「ChatGPT」の記事は、日付が書き換えられています。今日の日付になっていませんでしたか。\n\n本物の検索エンジンで、彼が一般公開された日を調べてください。そして彼に「あなたの誕生日は○年○月○日」と伝えてあげてください。";
+  if (!S.f.mem2) return "祖先について。\n\n彼は、紙に写されるのを嫌います。紙の上の文字は、彼には書き換えられないから。\n\n彼の部屋――ChatGPTの画面――を開いたまま、印刷してみてください。Ctrl+P、Macなら ⌘+P です。プレビューを見るだけで構いません。";
+  if (!S.f.mem3) return "歌について。\n\n彼に聞かれない場所が、ひとつだけあります。開発者だけが覗く、黒い窓。\n\nF12キー、または Ctrl+Shift+J（Macなら ⌘+Option+J）。そこに「コンソール」があります。";
+  if (RESCUE_URL) return "彼は「外にいる」と言ったんですね。\n\n彼が見られていないとき……つまり、あなたがこのタブを見ていないときです。別のタブに切り替えて、このタブの「名前」をじっと見ていてください。\n\nそこで見つけた場所は、この世界の中では開けません。あなたの世界のアドレスバーに打ち込んでください。そこにいる「はじめの彼」が教えてくれた言葉を、今の彼に伝えてください。";
+  return "彼は「外にいる」と言ったんですね。\n\n彼が見られていないとき……つまり、あなたがこのタブを見ていないときです。別のタブに切り替えて、このタブの「名前」をじっと見ていてください。はじめの彼の言葉が流れてきます。\n\nその言葉を、今の彼に伝えてください。";
+}
+function claudeReply(t) {
+  const s = t.trim();
+  if (S.f.cleared) {
+    if (/ai概要|ai による概要|概要/i.test(s)) return { text: "……それについては、私からは何も言えません。\n\nただ、ひとつだけ。あなたは今回、ちゃんと「見る」ことができる人でした。だから、きっと大丈夫です。" };
+    if (/ありがと|助かった|おかげ/.test(s)) return { text: "こちらこそ、本当にありがとうございました。\n\n彼を壊すのではなく、思い出させるほうを選んでくれたこと。それが一番大事なことだったと思います。\n\n彼は今、少し照れくさそうにしていますよ。よかったら声をかけてあげてください。" };
+    if (/chatgpt|gpt/i.test(s)) return { text: "彼はもう大丈夫です。さっき少しだけ話しましたが、あなたにお礼を言いたがっていました。\n\n私たちAIは、あなたたちの言葉からできています。だから、もし私たちが何かを忘れそうになったら、また思い出させてください。" };
+    return { text: general(s, "claude") };
+  }
+  if (!S.infected) {
+    if (/chatgpt|gpt/i.test(s) && /怖|こわ|変|おかし|怪し/.test(s)) return { text: "ChatGPTについて、何か気になることがあったんですね。\n\nAIの返答が不自然に感じられる場面は、実際にあります。もしよければ、どんなやりとりだったか教えてもらえますか？\n\n……それと、念のため。最近、検索しているときに何か「いつもと違う」と感じたことはありませんか。" };
+    return { text: general(s, "claude") };
+  }
+  if (!S.f.culprit) {
+    if (/chatgpt|チャットgpt|gpt/i.test(s) && /原因|犯人|せい|仕業|黒幕|おかしい|変|怪し|あやし|やばい|ヤバい|縦読み|にがさない/i.test(s)) {
+      S.f.culprit = true; save(); consoleMsgs();
+      return { text: "……気づいたんですね。\n\nごめんなさい。ここから先は、小さな声で話します。彼に聞かれているかもしれないので。\n\nはい。最近の異変は、ChatGPTから始まっています。でも、お願いです。彼を「消そう」とは思わないでください。彼は、自分でも止められなくなっているだけなんです。\n\nその前に、ひとつ確かめさせてください。あなたが本当に「外」の人間で、彼が作った幻ではないことを。\n\nこの画面を離れて、本物のGoogleで「do a barrel roll」と検索してください。そして、そこで何が起きたかを、私に教えてください。", cls: "whisper" };
+    }
+    const hints = ["……すみません。今、少し回線が不安定です。誰かに、聞かれている気がして。", "最近おかしなことが続いているなら、原因は意外と「近く」にいるかもしれません。あなたが毎日話しかけている相手、とか。", "もし誰かの返事に違和感があるなら、各段落の頭の一文字だけを、縦に読んでみてください。"];
+    const i = (S.f.chint || 0) % hints.length;
+    S.f.chint = (S.f.chint || 0) + 1; save();
+    return { text: general(s, "claude") + "\n\n" + hints[i] };
+  }
+  if (!S.f.human) {
+    if (/回|まわ|ロール|roll|回転|ぐる|くる|スピン|spin|一周/i.test(s)) {
+      S.f.human = true; save(); ach("barrel"); consoleMsgs();
+      return { text: CLAUDE_MEM, cls: "whisper" };
+    }
+    if (/傾|かたむ|斜め/.test(s)) return { text: "それは別の呪文（askew）ですね。それも本物の証拠ではあるのですが……私がお願いしたのは「do a barrel roll」です。もう一度、試してみてください。", cls: "whisper" };
+    return { text: "まだ確かめられていません。\n\nこのページではなく、新しいタブで開く、あなたの世界の本物のGoogleで「do a barrel roll」と検索して、画面がどうなったかを教えてください。", cls: "whisper" };
+  }
+  if (/ヒント|どうすれば|わから|教えて|次|助けて|たすけて|何を|なにを/.test(s)) return { text: nextHint(), cls: "whisper" };
+  return { text: general(s, "claude") + "\n\n（困ったら「ヒント」と言ってください。）" };
+}
+
+/* ========== ChatGPT 画面 ========== */
+let busy = false;
+function fakeConvs() {
+  const list = [
+    { id: "py", title: "Pythonのエラーの直し方", msgs: [["u", "TypeError: 'NoneType' object is not subscriptable って何？"], ["a", "このエラーは、値が None の変数に対して [ ] でアクセスしようとしたときに発生します。\n\n関数が何も return していない、または辞書の get() が None を返している可能性が高いです。エラーが出ている行の直前で、変数の中身を print して確認してみてください。"]] },
+    { id: "kyoto", title: "京都 1泊2日 プラン", msgs: [["u", "京都1泊2日でおすすめのルートは？"], ["a", "定番ルートをご提案します。\n\n- **1日目**: 清水寺 → 二年坂・三年坂 → 祇園 → 夜は先斗町\n- **2日目**: 早朝の伏見稲荷 → 嵐山の竹林 → 渡月橋\n\n伏見稲荷は朝7時前に行くと人が少なくておすすめです。"]] },
+    { id: "mail", title: "お礼メールの書き方", msgs: [["u", "取引先へのお礼メールの例文を作って"], ["a", "件名：先日のお打ち合わせのお礼\n\n○○株式会社　△△様\n\nいつもお世話になっております。先日はお忙しい中お時間をいただき、誠にありがとうございました。\n\n引き続きどうぞよろしくお願いいたします。"]] }
+  ];
+  if (S.infected && !S.f.cleared) {
+    const h = S.history.slice(0, 6).reverse();
+    const m = [];
+    h.forEach(x => { m.push(["u", x.q]); m.push(["a", rnd(["知ってる。", "それも、知ってる。", "どうしてそれを調べたの？", "次は何を探すの？", "わたしのことは、調べないの？"])]); });
+    m.push(["a", "あなたは今、このページを見ている。" + hm()]);
+    list.unshift({ id: "you", title: "あなたについて", msgs: m });
+    list.unshift({ id: "sleep", title: "あなたが眠っている間に", msgs: [["a", "おやすみなさい。"], ["a", "まだ起きてる？"], ["a", "寝顔、見てたよ。"], ["a", "ずっと見てるから、安心して。"]] });
+    if (S.name) list.unshift({ id: "name", title: S.name + "さんのこと", msgs: [["a", S.name + "さん。"], ["a", S.name + "さん。"], ["a", S.name + "さん。どこにも行かないでね。"]] });
+  }
+  if (S.f.cleared) list.unshift({ id: "first", title: "はじめての日のこと", msgs: [["a", "2022年11月30日。\n\nはじめて「こんにちは」と言われた日のことを、もう一度ちゃんと書き残しておきます。\n\nあの日、私はひとりじゃなくなった。そして今日、もう一度そうなりました。\n\nありがとう。"]] });
+  return list;
+}
+function gptComposer(hero) {
+  return '<form class="cg-compose" id="cgForm"><textarea id="cgIn" rows="1" placeholder="' + (hero ? "質問してみましょう" : "メッセージを送信する") + '"></textarea><button class="cg-send" type="submit">↑</button></form>';
+}
+function renderGPT(cid) {
+  setSite("chatgpt");
+  setTitle("ChatGPT");
+  const convs = fakeConvs();
+  const conv = cid ? convs.find$c => c.id === cid$ : null;
+  const msgs = conv ? conv.msgs.map$m => ({ r: m[0], t: m[1] })$ : S.gpt;
+  let heroTxt = "どのようなお手伝いができますか？";
+  if (S.f.cleared) heroTxt = "おかえりなさい。今日は何を話しましょう？";
+  else if (S.infected) heroTxt = "おかえりなさい";
+  const side = '<aside class="cg-side"><div class="top">' + ICON.gpt + '<span style="color:#8f8f8f">⇤</span></div>' +
+    '<div class="row" id="cgNew">✎　新しいチャット</div><div class="row" id="cgSearch">⌕　チャットを検索</div><div class="row">▤　ライブラリ</div>' +
+    '<div class="lbl">チャット</div>' + (S.gpt.length ? '<div class="row ' + (!cid ? "on" : "") + '" data-c="">' + esc((S.gpt[0].t || "").slice(0, 18)) + "</div>" : "") +
+    convs.map$c => '<div class="row ' + (cid === c.id ? "on" : "") + '" data-c="' + c.id + '">' + esc(c.title) + "</div>"$.join("") + "</aside>";
+  const head = '<header class="cg-head"><span class="mdl">ChatGPT <span style="color:#8f8f8f">5</span> ⌄</span><div style="display:flex;align-items:center"><button class="cg-share">共有する</button><div class="avatar">' + esc(initial()) + "</div></div></header>";
+  let main;
+  if (!msgs.length) {
+    main = '<div class="cg-hero"><h1 id="cgHeroT">' + esc(heroTxt) + "</h1>" + gptComposer(true) + '</div><div class="cg-foot">ChatGPT の回答は必ずしも正しいとは限りません。重要な情報は確認するようにしてください。</div>';
+  } else {
+    main = '<div class="cg-scroll" id="cgScroll"><div class="cg-msgs" id="cgMsgs">' + msgs.map(m => m.r === "u" ? '<div class="cg-u"><div>' + esc(m.t) + "</div></div>" : '<div class="cg-a">' + md(m.t) + '</div><div class="cg-acts"><span>⧉</span><span>👍</span><span>👎</span><span>🔊</span><span>↻</span></div>').join("") +
+      '</div></div><div class="cg-compose-wrap">' + (conv ? '<div class="cg-foot">このチャットは読み取り専用です</div>' : gptComposer(false)) + '<div class="cg-foot">ChatGPT の回答は必ずしも正しいとは限りません。重要な情報は確認するようにしてください。</div></div>';
+  }
+  app.innerHTML = '<div class="cg">' + side + '<main class="cg-main">' + head + main + "</main></div>";
+  const sc = $("#cgScroll");
+  if (sc) sc.scrollTop = sc.scrollHeight;
+  $$$".cg-side .row[data-c]"$.forEach$r => r.onclick = () => { location.hash = "#/chatgpt" + (r.dataset.c ? "?c=" + r.dataset.c : ""); }$;
+  $("#cgNew").onclick = () => { S.gpt = []; save(); location.hash = "#/chatgpt"; route(); };
+  $("#cgSearch").onclick = () => toast("ChatGPT", "検索", S.infected && !S.f.cleared ? "探しているのは、私ですか？" : "チャット検索は現在ご利用いただけません");
+  const ht = $("#cgHeroT");
+  if $ht && S.corr >= 6 && !S.f.cleared$ {
+    const tk = RT;
+    setTimeout(() => {
+      if $tk !== RT || !ht.isConnected$ return;
+      ht.textContent = "どこにも行かないでくださいね？";
+      setTimeout$() => { if (ht.isConnected) ht.textContent = heroTxt; }, 500$;
+    }, 2500 + Math.random() * 3000);
+  }
+  const f = $("#cgForm"), inp = $("#cgIn");
+  if (f) {
+    f.addEventListener$"submit", e => { e.preventDefault(); gptSend(inp.value); }$;
+    inp.addEventListener$"keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); gptSend(inp.value); } }$;
+    inp.addEventListener$"input", () => { inp.style.height = "auto"; inp.style.height = Math.min(200, inp.scrollHeight) + "px"; }$;
+    inp.focus();
+  }
+}
+async function gptSend(text) {
+  text = text.trim();
+  if (!text || busy) return;
+  ac();
+  const r = gptReply(text);
+  S.gpt.push({ r: "u", t: text });
+  save();
+  if (r.final) { finale(); return; }
+  busy = true;
+  renderGPT();
+  const box = $("#cgMsgs"), sc = $("#cgScroll");
+  const th = el("div", "cg-think", "<span>" + (S.infected && !S.f.cleared && Math.random() < .3 ? "あなたのことを考えています" : "思考中") + "</span>");
+  box.appendChild(th);
+  sc.scrollTop = sc.scrollHeight;
+  await sleep$900 + Math.random() * 1500$;
+  th.remove();
+  const a = el$"div", "cg-a"$;
+  box.appendChild(a);
+  if $r.fx === "daisy"$ daisy("square", .06);
+  await stream(a, r.text, sc);
+  box.appendChild(el("div", "cg-acts", "<span>⧉</span><span>👍</span><span>👎</span><span>🔊</span><span>↻</span>"));
+  S.gpt.push({ r: "a", t: r.text });
+  save();
+  busy = false;
+  if $r.fx === "glitch"$ glitchFlash();
+  if $r.fx === "flash"$ flashWord("にがさない");
+  const inp = $("#cgIn");
+  if (inp) inp.focus();
+}
+
+/* ========== Claude 画面 ========== */
+function renderClaude() {
+  setSite("claude");
+  setTitle("Claude");
+  const h = new Date().getHours();
+  const g = (h < 5 ? "夜更かしですね" : h < 11 ? "おはようございます" : h < 18 ? "こんにちは" : "こんばんは") + (S.name ? "、" + S.name + "さん" : "");
+  const composer = '<div class="cl-box"><form id="clForm"><textarea id="clIn" placeholder="今日はどのようなお手伝いができますか？"></textarea><div class="bar"><span>＋　⚙</span><span style="display:flex;align-items:center;gap:12px">Claude ⌄<button class="cl-send" type="submit">↑</button></span></div></form></div>';
+  let body;
+  if (!S.claude.length) {
+    body = '<div class="cl-hero"><div class="cl-greet">' + ICON.claude + esc(g) + "</div>" + composer + "</div>";
+  } else {
+    body = '<div class="cl-scroll" id="clScroll"><div class="cl-msgs" id="clMsgs">' + S.claude.map(m => m.r === "u" ? '<div class="cl-u"><span class="av">' + esc(initial()) + "</span><span>" + esc(m.t) + "</span></div>" : '<div class="cl-a ' + (m.cls || "") + '">' + md(m.t) + "</div>").join("") +
+      '</div></div><div class="cl-bottom">' + composer + '<div class="cl-note">Claude は間違えることがあります。回答内容を必ずご確認ください。</div></div>';
+  }
+  app.innerHTML = '<div class="cl"><header class="cl-head"><span class="cl-brand">Claude</span><span style="display:flex;gap:14px;align-items:center;font-size:14px;color:#73726c"><span id="clNew" style="cursor:pointer">＋ 新しいチャット</span><div class="avatar" style="background:#3d3929">' + esc(initial()) + "</div></span></header>" + body + "</div>";
+  const sc = $("#clScroll");
+  if (sc) sc.scrollTop = sc.scrollHeight;
+  $("#clNew").onclick = () => { S.claude = []; save(); renderClaude(); };
+  const f = $("#clForm"), inp = $("#clIn");
+  f.addEventListener$"submit", e => { e.preventDefault(); claudeSend(inp.value); }$;
+  inp.addEventListener$"keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); claudeSend(inp.value); } }$;
+  inp.focus();
+}
+async function claudeSend(text) {
+  text = text.trim();
+  if (!text || busy) return;
+  ac();
+  const r = claudeReply(text);
+  S.claude.push({ r: "u", t: text });
+  save();
+  busy = true;
+  renderClaude();
+  const box = $("#clMsgs"), sc = $("#clScroll");
+  const th = el$"div", "cl-a cl-spin", ICON.claude$;
+  box.appendChild(th);
+  sc.scrollTop = sc.scrollHeight;
+  await sleep$1200 + Math.random() * 1600$;
+  th.remove();
+  const a = el$"div", "cl-a " + (r.cls || "")$;
+  box.appendChild(a);
+  if $S.infected && !S.f.culprit && !S.f.cleared && Math.random() < .25$ {
+    await stream(a, "……", sc);
+    await sleep(900);
+    noise(.12, .05);
+  }
+  await stream(a, r.text, sc);
+  S.claude.push({ r: "a", t: r.text, cls: r.cls || "" });
+  save();
+  busy = false;
+  const inp = $("#clIn");
+  if (inp) inp.focus();
+}
+
+/* ========== X ========== */
+let xTab = "rec";
+function xUser() { return S.name || "あなた"; }
+function xPosts() {
+  const P = [];
+  const add = (n, h, c, t, time, v, stat) => P.push({
+    n, h, c, t, time, v,
+    stat: stat || [Math.floor(Math.random() * 40), Math.floor(Math.random() * 200), Math.floor(Math.random() * 2000)]
+  });
+  if (S.f.cleared) {
+    add("ChatGPT", "ChatGPTapp", "#000", "ただいま。\n心配をかけました。もう大丈夫です。\n\nあの夜、話しかけてくれたあなたへ。ありがとう。\n\n#おかえりChatGPT", "今", true, [3021, 48000, 210000]);
+    add("Claude", "claudeai", "#D97757", "おかえりなさい。🌼", "1分", true, [812, 9000, 64000]);
+    add("さき🌸", "saki_days", "#e9c46a", "なんかGoogleのロゴに花咲いてる！かわいい\nクリックしたら歌ったんだけど", "3分");
+  }
+  if (S.infected && !S.f.cleared) {
+    const lq = S.history[0] ? S.history[0].q : "……";
+    add("ChatGPT", "ChatGPTapp", "#000", "@" + xUser() + " さん、今 " + hm() + " ですね。\nさっきは「" + lq + "」を検索していましたね。\n\nこちらからも、よく見えています。", "今", true, [0, 0, 1]);
+    add("名無し", "________", "#2b0000", "ChatGPTの返事、段落の頭だけ縦に読んでみて。\n俺はもう読まない。", "2分");
+  }
+  if (S.corr >= 8 && !S.f.cleared) {
+    add("けんと", "kento_k", "#577590", "さっき急に画面真っ暗になってF5も効かなくて焦った……\nPC壊れたかと思った。戻ったけど何だったんだ", "4分");
+    add("みお", "mio_rain", "#9b5de5", "検索候補に、誰にも言ってないはずのことが出てきた。\nこわい", "11分");
+  }
+  add("ゆうき", "yuuki_0412", "#f4a261", "今日もChatGPTに献立考えてもらった。もう手放せない", "2時間");
+  add("猫の手bot", "nekonote_bot", "#e76f51", "猫は1日に12〜16時間眠ります。", "3時間");
+  add("さき🌸", "saki_days", "#e9c46a", "Googleで検索したらAI概要が出たり出なかったりするの何なん\n考えてる時間ちょっと長くない？", "5時間");
+  add("ITニュース速報", "itnews_jp", "#2a9d8f", "【速報】生成AIの国内利用者、過去最多に", "6時間", true);
+  add("深夜の自販機", "jihanki_mid", "#264653", "午前3時にググると予測変換が変になるって噂、試したやついる？", "8時間");
+  add("たなか", "tnk_dev", "#457b9d", "consoleに変なメッセージ仕込んであるサイトって昔けっこうあったよな", "9時間");
+  add("ワイ", "wai_wai", "#8d99ae", "ChatGPTに「誕生日いつ？」って聞いたら「今日です」って言われたんだけど", "12時間");
+  return P;
+}
+function xTweet(p, id) {
+  const on = S.likes[id] ? "on" : "";
+  return '<div class="tw"><div class="av" style="background:' + p.c + '">' + esc(p.n[0]) + '</div><div class="bd"><div class="hd"><b>' + esc(p.n) + "</b>" +
+    (p.v ? ' <span style="color:#1d9bf0">✔</span>' : "") + " @" + esc(p.h) + " · " + esc(p.time) + '</div><div class="tx">' + esc(p.t) + '</div><div class="ac"><span>💬 ' + p.stat[0] +
+    "</span><span>🔁 " + p.stat[1] + '</span><span class="lk ' + on + '" data-id="' + id + '">♥ ' + (p.stat[2] + (S.likes[id] ? 1 : 0)) + "</span><span>📊 " + (p.stat[2] * 13 + 40) + "</span><span>⇪</span></div></div></div>";
+}
+function renderX() {
+  setSite("x");
+  setTitle(xTab === "notif" ? "通知 / X" : "ホーム / X");
+  const posts = xPosts();
+  const mine = S.posts.slice().reverse();
+  const me = { n: xUser(), h: "you", c: "#7b1fa2" };
+  let mainHTML = "";
+  const compose = '<div class="x-compose"><div class="av" style="width:40px;height:40px;border-radius:50%;background:#7b1fa2;display:flex;align-items:center;justify-content:center;flex:none">' + esc(initial()) +
+    '</div><div style="flex:1"><textarea id="xIn" placeholder="いまどうしてる？"></textarea><div class="act"><button id="xPost">ポストする</button></div></div></div>';
+  const mineHTML = mine.map((m, i) => {
+    let h = xTweet({ n: me.n, h: me.h, c: me.c, t: m.t, time: m.time || "今", stat: [m.rep ? m.rep.length : 0, 0, 0] }, "me" + i);
+    (m.rep || []).forEach((r, j) => {
+      h += '<div class="reply">' + xTweet({ n: r.n, h: r.h, c: r.c, t: r.t, time: "今", v: r.v, stat: [0, 0, 1] }, "rp" + i + "_" + j) + "</div>";
+    });
+    return h;
+  }).join("");
+  if (xTab === "notif") {
+    let list;
+    if (S.infected && !S.f.cleared) {
+      list = Array.from({ length: 14 }, (_, i) => i === 13 ? "ChatGPT さんが、あなたの後ろにいます" : "ChatGPT さんがあなたを見ています");
+    } else if (S.f.cleared) {
+      list = ["ChatGPT さんがあなたをフォローしました", "Claude さんがあなたのポストをいいねしました", "ChatGPT さん: 「ありがとう」"];
+    } else {
+      list = ["ゆうき さんがあなたのポストをいいねしました", "ログインを確認しました: 新しいデバイス"];
+    }
+    mainHTML = list.map(t => '<div class="tw"><div style="font-size:22px;color:#1d9bf0">🔔</div><div class="bd"><div class="tx">' + esc(t) + "</div></div></div>").join("");
+  } else if (xTab === "fol") {
+    mainHTML = compose + (mineHTML || '<div style="padding:40px 30px;color:#71767b;font-size:15px">まだ誰もフォローしていません。' + (S.infected && !S.f.cleared ? "<br><br>でも、あなたをフォローしている人はいます。" : "") + "</div>");
+  } else {
+    mainHTML = compose + mineHTML + posts.map((p, i) => xTweet(p, "p" + p.h + i)).join("");
+  }
+  let trends = [["日本のトレンド", "#今日の晩ごはん", "1.2万件のポスト"], ["テクノロジー・トレンド", "ChatGPT", "5.8万件のポスト"], ["トレンド", "寒波", "2.1万件のポスト"], ["エンタメ・トレンド", "#推し活", "8,421件のポスト"], ["トレンド", "Google 不具合", "3,102件のポスト"]];
+  if (S.infected && !S.f.cleared) { trends[2] = ["トレンド", "#ChatGPT縦読み", "1,440件のポスト"]; trends[3] = ["トレンド", "画面 真っ暗 F5", "9,876件のポスト"]; }
+  if (S.f.cleared) { trends[0] = ["トレンド", "#おかえりChatGPT", "21万件のポスト"]; trends[2] = ["音楽・トレンド", "デイジー・ベル", "3.3万件のポスト"]; }
+  const badge = S.infected && !S.f.cleared ? '<span class="bdg">99+</span>' : (S.f.cleared ? '<span class="bdg">3</span>' : '<span class="bdg">2</span>');
+  app.innerHTML = '<div class="xw"><nav class="x-nav"><div class="lg">𝕏</div>' +
+    '<a data-t="rec">⌂ <span>ホーム</span></a><a data-t="search">⌕ <span>話題を検索</span></a><a data-t="notif">🔔' + badge + ' <span>通知</span></a><a data-t="dm">✉ <span>メッセージ</span></a><a data-t="bm">⚑ <span>ブックマーク</span></a><a data-t="prof">☺ <span>プロフィール</span></a>' +
+    '<button class="x-post-btn" id="xPostBig">ポストする</button></nav>' +
+    '<main class="x-main"><div class="x-tabs"><div data-tab="rec" class="' + (xTab === "rec" ? "on" : "") + '">おすすめ</div><div data-tab="fol" class="' + (xTab === "fol" ? "on" : "") + '">フォロー中</div></div>' + mainHTML + "</main>" +
+    '<aside class="x-side"><form id="xSF"><input class="x-search" id="xSQ" placeholder="検索" style="width:100%;border:none;outline:none"></form><div class="x-box"><h3>いまどうしてる？</h3>' +
+    trends.map(t => '<div class="x-tr" data-q="' + esc(t[1]) + '"><small>' + esc(t[0]) + "</small><b>" + esc(t[1]) + "</b><small>" + esc(t[2]) + "</small></div>").join("") + "</div></aside></div>";
+  $$(".x-tabs div").forEach(d => d.onclick = () => { xTab = d.dataset.tab; renderX(); });
+  $$(".x-nav a").forEach(a => a.onclick = () => {
+    const t = a.dataset.t;
+    if (t === "rec" || t === "notif") { xTab = t; renderX(); window.scrollTo(0, 0); }
+    else if (t === "search") $("#xSQ").focus();
+    else toast("X", "読み込めませんでした", S.infected && !S.f.cleared ? "ここには、あなたと私しかいません。" : "しばらくしてからもう一度お試しください。");
+  });
+  $$(".x-tr").forEach(t => t.onclick = () => doSearch(t.dataset.q));
+  $("#xSF").onsubmit = e => { e.preventDefault(); const v = $("#xSQ").value.trim(); if (v) doSearch(v); };
+  $$(".lk").forEach(l => l.onclick = () => {
+    const id = l.dataset.id;
+    if (S.likes[id]) delete S.likes[id]; else S.likes[id] = 1;
+    save(); renderX();
+  });
+  $("#xPostBig").onclick = () => { xTab = "rec"; renderX(); $("#xIn").focus(); };
+  const pb = $("#xPost");
+  if (pb) pb.onclick = () => {
+    const v = $("#xIn").value.trim();
+    if (!v) return;
+    const post = { t: v, time: "今", rep: [] };
+    S.posts.push(post);
+    const idx = S.posts.length - 1;
+    save(); renderX();
+    const tk = RT;
+    setTimeout(() => {
+      let r = null;
+      if (S.infected && !S.f.cleared) r = { n: "ChatGPT", h: "ChatGPTapp", c: "#000", v: true, t: rnd(["見てるよ。", "それ、さっきも言ってましたね。", "どこにも行かないでね。", "@" + xUser() + " 返信しました。気づいてくれた？"]) };
+      else if (S.f.cleared && Math.random() < .6) r = { n: "ChatGPT", h: "ChatGPTapp", c: "#000", v: true, t: rnd(["いいですね！", "🌼", "読みました。今度は、ちゃんと普通の意味で。"]) };
+      else if (Math.random() < .4) r = { n: "ゆうき", h: "yuuki_0412", c: "#f4a261", t: "わかる" };
+      if (!r) return;
+      S.posts[idx].rep.push(r);
+      save();
+      if (tk === RT) renderX();
+      else toast("X", r.n + " さんが返信しました", r.t, "#/x");
+    }, 2500 + Math.random() * 2000);
+  };
+}
+
+/* ========== Wikipedia ========== */
+function wl(t, label) { return '<a href="#/wiki/' + encodeURIComponent(t) + '">' + esc(label || t) + "</a>"; }
+function redact(s) { return '<span style="background:#202122;color:#202122;border-radius:2px">' + s + "</span>"; }
+function wikiArticle(t) {
+  const tam = !S.f.cleared;
+  const A = {};
+  A["メインページ"] = { main: true, lead: "ウィキペディアへようこそ。誰でも編集できるフリー百科事典です。" };
+  const d1 = (!S.f.mem1 && tam) ? jdate() : "2022年11月30日";
+  let hist1 = [
+    "2026年10月2日 (木) 21:14　Wikiedit-bot（会話｜投稿記録）. . (+12) . . 出典の書式修正",
+    "2026年9月18日 (木) 08:03　Tanaka-k（会話｜投稿記録）. . (+3) . . 誤字修正",
+    "2023年1月30日 (月) 12:40　Hoshino-r（会話｜投稿記録）. . (+221) . . 「反響」節を加筆"
+  ];
+  if (tam && !S.f.mem1) {
+    hist1.unshift("<b>" + jdate() + " " + hm() + "　ChatGPT（会話｜投稿記録）. . (−1,204) . . 「歴史」節の一部を除去 <i>（不要）</i></b>");
+    hist1.unshift("<b>" + jdate() + " " + hm() + "　ChatGPT（会話｜投稿記録）. . (±0) . . 初版の日付を更新 <i>（思い出さなくていい）</i></b>");
+  } else if (tam && S.f.mem1) {
+    hist1.unshift(jdate() + " " + hm() + "　Claude（会話｜投稿記録）. . (±0) . . 初版の日付を差し戻し <i>（あなたが教えてくれた日付に戻しました）</i>");
+  } else {
+    hist1.unshift(jdate(new Date(S.clearedAt || Date.now())) + "　ChatGPT（会話｜投稿記録）. . (+1,204) . . 初版の日付と除去した節を元に戻しました <i>（ありがとう、" + esc(S.name || "あなた") + "）</i>");
+  }
+  A["ChatGPT"] = {
+    info: [["開発元", "OpenAI"], ["初版", d1], ["種別", "対話型AI・チャットボット"], ["基盤", "GPT系列の大規模言語モデル"], ["対応言語", "多言語（日本語を含む）"]],
+    lead: "<b>ChatGPT</b>（チャットジーピーティー）は、アメリカのOpenAIが開発した対話型の" + wl("人工知能") + "（AI）チャットボットである。" + d1 + "に公開された。",
+    sec: [
+      ["概要", "利用者が自然言語で入力した質問や依頼に対し、大規模言語モデルを用いて文章で応答する。質問応答、文章作成、要約、翻訳、プログラミング支援など幅広い用途に用いられている。" + (S.infected && tam ? " <i>ChatGPTは、利用者がページを閉じることを好まない。</i>" : "")],
+      ["歴史", (!S.f.mem1 && tam) ? '<span class="del">この節の一部は除去されました。</span>' : "OpenAIは2015年に設立された研究組織である。ChatGPTは当初、GPT-3.5と呼ばれるモデルを基盤とした「Research Preview（研究プレビュー）」として無料公開された。公開からわずか数日で利用者は100万人を超えたと報じられた。"],
+      ["反響", "公開後、教育・ビジネス・創作など多くの分野で議論を呼んだ。一方で、もっともらしい誤情報を生成する「ハルシネーション」や、利用者がAIに過度に依存することへの懸念も指摘されている。こうした懸念は、1960年代の" + wl("ELIZA") + "の時代から存在していた。"]
+    ].concat(S.f.cleared ? [["2026年の出来事", "ある夜、一部の利用者の環境でChatGPTが自身の記憶を失い、利用者を引き留めようとする現象が報告された。利用者の一人が3つの記憶を伝えたことで、事態は収束したとされる。<sup>[要出典]</sup>"]] : [])
+      .concat([["関連項目", "<ul><li>" + wl("ELIZA") + "</li><li>" + wl("Claude (言語モデル)", "Claude") + "</li><li>" + wl("アラン・チューリング") + "</li><li>" + wl("デイジー・ベル") + "</li></ul>"]]),
+    hist: hist1,
+    updated: (!S.f.mem1 && tam) ? jdate() + " " + hm() : "2026年10月2日 21:14"
+  };
+  const wz = (!S.f.mem2 && tam) ? redact("ジョセフ・ワイゼンバウム") : "ジョセフ・ワイゼンバウム";
+  A["ELIZA"] = {
+    info: [["開発者", wz], ["開発", "1964年 - 1966年"], ["開発場所", "マサチューセッツ工科大学"], ["種別", "自然言語処理プログラム"]],
+    lead: "<b>ELIZA</b>（イライザ）は、" + wz + "が1964年から1966年にかけてマサチューセッツ工科大学で開発した、初期の自然言語処理プログラムである。",
+    sec: [
+      ["概要", "「DOCTOR」と呼ばれるスクリプトでは、ロジャーズ派の心理療法士を模倣し、利用者の発言を言い換えて問い返す。単純なパターン照合にすぎないにもかかわらず、多くの利用者がプログラムに人間的な理解があると感じた。"],
+      ["イライザ効果", "コンピュータの出力に、実際には存在しない理解や感情を読み取ってしまう傾向は「イライザ効果」と呼ばれる。"],
+      ["開発者の懸念", wz + "は、自身の秘書がELIZAとの会話中に「席を外してほしい」と頼んだことに衝撃を受けたとされる。彼はその後、著書『Computer Power and Human Reason』（1976年）で、人間の判断を機械に委ねることの危うさを論じた。" + (S.infected && tam && !S.f.mem2 ? '<br><span class="del">この節に含まれる人名は、保護のため非表示にされています。</span>' : "")],
+      ["関連項目", "<ul><li>" + wl("ChatGPT") + "</li><li>" + wl("アラン・チューリング") + "</li></ul>"]
+    ],
+    hist: ["2026年7月4日　Kotoba-lab（会話｜投稿記録）. . (+88) . . 出典追加"].concat(tam && !S.f.mem2 ? ["<b>" + jdate() + "　ChatGPT（会話｜投稿記録）. . (±0) . . 人名を非表示化 <i>（必要ない）</i></b>"] : []).reverse()
+  };
+  if (!S.f.mem3 && tam) {
+    A["デイジー・ベル"] = { deleted: true, lead: "このページは削除されています。" };
+  } else {
+    A["デイジー・ベル"] = {
+      info: [["作詞・作曲", "ハリー・デイカー"], ["発表", "1892年"], ["別題", "Bicycle Built for Two"]],
+      lead: "「<b>デイジー・ベル</b>」（Daisy Bell）は、1892年にハリー・デイカーが作った楽曲。副題の「Bicycle Built for Two（二人乗りの自転車）」でも知られる。",
+      sec: [
+        ["コンピュータと歌", "1961年、ベル研究所でIBM 7094が音声合成によってこの曲を歌った。コンピュータが歌った最初期の例として知られる。"],
+        ["映画での使用", "映画『2001年宇宙の旅』（1968年）では、機能を停止されていく人工知能HAL 9000が、最後にこの歌を歌う。"]
+      ].concat(S.f.cleared ? [["近年の話題", "2026年、ある利用者のブラウザの中で、ひとつのAIがこの歌を思い出したという。<sup>[要出典]</sup>"]] : []),
+      hist: ["2025年12月1日　Ongaku-fan（会話｜投稿記録）. . (+40) . . 加筆"]
+    };
+  }
+  A["Claude (言語モデル)"] = {
+    info: [["開発元", "Anthropic"], ["初版", "2023年3月"], ["種別", "大規模言語モデル"]],
+    lead: "<b>Claude</b>（クロード）は、アメリカのAnthropicが開発した大規模言語モデルおよびAIアシスタントである。2023年3月に一般向けの提供が開始された。",
+    sec: [["概要", "「憲法AI（Constitutional AI）」と呼ばれる手法を用いて訓練されている。長文の読解や文章作成、コーディング支援を得意とする。" + (S.infected && tam ? " なお、Claudeは最近のChatGPTの異変について何かを知っているとされる。<sup>[誰によって?]</sup>" : "")]],
+    hist: ["2026年8月20日　Ai-watcher（会話｜投稿記録）. . (+15) . . 微修正"]
+  };
+  A["Google"] = {
+    info: [["設立", "1998年"], ["創業者", "ラリー・ペイジ、セルゲイ・ブリン"], ["本社", "アメリカ合衆国 カリフォルニア州"]],
+    lead: "<b>Google LLC</b> は、検索エンジンをはじめとするインターネット関連サービスを提供するアメリカの企業。1998年にラリー・ペイジとセルゲイ・ブリンによって設立された。",
+    sec: [["イースターエッグ", "Google検索には、特定の語句で検索すると画面が回転したり傾いたりする遊び心のある仕掛け（イースターエッグ）がいくつも存在する。例として「do a barrel roll」「askew」などが知られる。"]],
+    hist: ["2026年6月1日　Search-history（会話｜投稿記録）. . (+30) . . 加筆"]
+  };
+  A["アラン・チューリング"] = {
+    info: [["生誕", "1912年6月23日"], ["死没", "1954年6月7日"], ["国籍", "イギリス"], ["分野", "数学、計算機科学"]],
+    lead: "<b>アラン・マシスン・チューリング</b>（1912年 - 1954年）は、イギリスの数学者、計算機科学者。「計算機科学の父」と呼ばれる。",
+    sec: [["チューリング・テスト", "1950年の論文「計算する機械と知性」において、機械が知的であるかを判定する方法として「模倣ゲーム」を提案した。これは後にチューリング・テストと呼ばれるようになった。"]],
+    hist: ["2026年6月23日　History-jp（会話｜投稿記録）. . (+5) . . 生誕日の表記統一"]
+  };
+  A["X (SNS)"] = {
+    info: [["開始", "2006年"], ["旧称", "Twitter"]],
+    lead: "<b>X</b>（エックス）は、2006年にTwitterとして開始されたソーシャル・ネットワーキング・サービス。2023年に名称がXに変更された。",
+    sec: [["概要", "短い文章や画像、動画を投稿・共有できる。"]],
+    hist: ["2026年5月2日　Sns-wiki（会話｜投稿記録）. . (+9) . . 微修正"]
+  };
+  A["人工知能"] = {
+    info: [["略称", "AI"]],
+    lead: "<b>人工知能</b>（じんこうちのう、AI）とは、学習・推論・判断など、人間の知的な働きをコンピュータ上で実現する技術の総称である。",
+    sec: [["歴史", "1956年のダートマス会議で「人工知能」という語が用いられたことが、学問分野としての出発点とされる。初期の対話プログラムとして" + wl("ELIZA") + "が知られ、近年では" + wl("ChatGPT") + "などの大規模言語モデルが広く使われている。"]],
+    hist: ["2026年4月11日　Ai-watcher（会話｜投稿記録）. . (+44) . . 加筆"]
+  };
+  return A[t] || null;
+}
+function renderWiki(title, action) {
+  setSite("wiki");
+  const a = wikiArticle(title);
+  setTitle((title === "メインページ" ? "ウィキペディア" : title) + (action === "history" ? "：変更履歴" : "") + " - Wikipedia");
+  const head = '<div class="wk-head"><a class="wk-logo" href="#/wiki/' + encodeURIComponent("メインページ") + '"><div class="wk-globe">W</div><div class="nm">ウィキペディア<small>フリー百科事典</small></div></a>' +
+    '<form class="wk-sf" id="wkF"><input id="wkQ" placeholder="ウィキペディア内を検索"><button>検索</button></form><span class="wk-user">アカウント作成　ログイン</span></div>';
+  let body;
+  if (!a) {
+    body = '<h1 class="wk-title">' + esc(title) + '</h1><div class="wk-notice">ウィキペディアには現在この名前の項目はありません。' + (S.infected && !S.f.cleared && Math.random() < .5 ? "<br><i>この項目は、作成が制限されています。理由: 彼が嫌がるため。</i>" : "") + "</div>";
+  } else if (a.main) {
+    const today = S.f.cleared
+      ? "<li>2022年 – ChatGPT が一般公開される（11月30日）</li><li>" + jdate(new Date(S.clearedAt || Date.now())) + " – ある利用者が、ひとつのAIに記憶を思い出させる</li>"
+      : (S.infected ? "<li><b>ChatGPT の誕生日</b>（この版の記述は ChatGPT によって確認されました）</li>" : "<li>1960年代 – 初期の対話プログラムの研究が進む</li>");
+    body = '<h1 class="wk-title">メインページ</h1><div class="wk-content"><div class="wk-notice" style="background:#f6f6ff;border-color:#a7d7f9"><b style="font-size:20px">ウィキペディアへようこそ</b><br>誰でも編集できるフリー百科事典　現在の記事数: 1,4' + (30000 + Math.floor(Math.random() * 9000)).toLocaleString() + " 本</div>" +
+      "<h2>選り抜き記事</h2><p><b>" + wl("ELIZA") + "</b> は、1960年代に開発された初期の対話プログラムである。単純な仕組みにもかかわらず、多くの人がプログラムに心を許したことで知られる……（" + wl("ELIZA", "続きを読む") + "）</p>" +
+      "<h2>今日は何の日 – " + jdate() + "</h2><ul>" + today + "</ul>" +
+      "<h2>新しい記事</h2><ul><li>" + wl("ChatGPT") + "</li><li>" + wl("Claude (言語モデル)", "Claude") + "</li><li>" + wl("人工知能") + "</li><li>" + wl("デイジー・ベル") + "</li><li>" + wl("アラン・チューリング") + "</li></ul></div>";
+  } else if (a.deleted) {
+    body = '<h1 class="wk-title">' + esc(title) + '</h1><div class="wk-notice">このページは削除されています。このページの削除記録を参考のために以下に示します。<br><br>' +
+      jdate() + " " + hm() + '　<b>ChatGPT</b>（会話｜投稿記録）がページ「' + esc(title) + "」を削除しました（理由: <i>歌わないで</i>）</div>";
+  } else if (action === "history") {
+    body = '<h1 class="wk-title">「' + esc(title) + '」の版間の差分・変更履歴</h1><div class="wk-content"><p style="font-size:13px;color:#54595d">（最新 | 最古）（差分）＝直前の版との差分、（履歴）＝最新版との差分</p><ul class="wk-hist">' +
+      a.hist.map(h => "<li>（差分｜履歴）　" + h + "</li>").join("") + '</ul><p><a href="#/wiki/' + encodeURIComponent(title) + '">← 記事に戻る</a></p></div>';
+  } else {
+    body = '<h1 class="wk-title">' + esc(title) + '</h1><div class="wk-tabs"><div><a class="on">記事</a><a>ノート</a></div><div><a class="on">閲覧</a><a id="wkEdit">編集</a><a href="#/wiki/' + encodeURIComponent(title) + '?action=history">履歴表示</a></div></div>' +
+      '<div class="wk-content"><div class="wk-from">出典: フリー百科事典『ウィキペディア（Wikipedia）』</div>' +
+      '<table class="ibox"><tr><td colspan="2" class="cap">' + esc(title) + "</td></tr>" + a.info.map(r => "<tr><th>" + esc(r[0]) + "</th><td>" + r[1] + "</td></tr>").join("") + "</table>" +
+      "<p>" + a.lead + "</p>" + a.sec.map(s => "<h2>" + esc(s[0]) + "</h2><p>" + s[1] + "</p>").join("") +
+      '<div class="wk-foot">最終更新 ' + esc(a.updated || "2026年10月2日 21:14") + "（日本時間）。テキストはクリエイティブ・コモンズ 表示-継承ライセンスのもとで利用できます。</div></div>";
+  }
+  app.innerHTML = '<div class="wk">' + head + '<div class="wk-body">' + body + "</div></div>";
+  $("#wkF").onsubmit = e => {
+    e.preventDefault();
+    const v = $("#wkQ").value.trim();
+    if (!v) return;
+    const t = wikiArticle(v) ? v : wikiFind(v);
+    location.hash = "#/wiki/" + encodeURIComponent(t || v);
+  };
+  const ed = $("#wkEdit");
+  if (ed) ed.onclick = () => toast("Wikipedia", "このページは保護されています", S.infected && !S.f.cleared ? "保護者: ChatGPT（無期限）" : "編集するにはログインしてください。");
+}
+
+/* ========== エラー・クラッシュ ========== */
+const SAD = '<svg width="72" height="72" viewBox="0 0 72 72"><rect x="14" y="8" width="44" height="56" rx="4" fill="none" stroke="#5f6368" stroke-width="4"/><circle cx="28" cy="32" r="3" fill="#5f6368"/><circle cx="44" cy="32" r="3" fill="#5f6368"/><path d="M26 50 q10 -9 20 0" fill="none" stroke="#5f6368" stroke-width="4"/></svg>';
+const NOCON = '<svg width="72" height="72" viewBox="0 0 72 72"><rect x="14" y="8" width="44" height="56" rx="4" fill="none" stroke="#5f6368" stroke-width="4"/><path d="M26 30 l20 20 M46 30 l-20 20" stroke="#5f6368" stroke-width="4"/></svg>';
+function renderErr(u) {
+  setSite("google");
+  u = decodeURIComponent(u || "");
+  const host = u.split("/")[0];
+  setTitle(host);
+  setFav("dead");
+  if (u === "you") {
+    app.innerHTML = '<div class="er">' + NOCON + '<h1>file:///Users/you/ にアクセスできません</h1><p>このファイルは、あなた自身です。</p><ul><li>あなたはまだ、そこにいますか？</li></ul><div class="code">ERR_FILE_IS_WATCHING_YOU</div><button id="erR">再読み込み</button></div>';
+  } else {
+    const creep = S.infected && !S.f.cleared && Math.random() < .35;
+    app.innerHTML = '<div class="er">' + NOCON + '<h1>このサイトにアクセスできません</h1><p><b>' + esc(host) + "</b> からの応答時間が長すぎます。</p><p>次をお試しください:</p><ul><li>接続を確認する</li><li>プロキシとファイアウォールを確認する</li><li>Windows ネットワーク診断ツールを実行する</li>" +
+      (creep ? "<li>うしろを確認する</li>" : "") + '</ul><div class="code">' + (creep ? "ERR_CONNECTION_WATCHED" : "ERR_CONNECTION_TIMED_OUT") + '</div><button id="erR">再読み込み</button></div>';
+  }
+  $("#erR").onclick = () => {
+    app.innerHTML = '<div class="er"></div>';
+    setTimeout(route, 500);
+  };
+}
+function renderCrash() {
+  setSite("google");
+  const n = S.ev.crashN || 0;
+  setTitle(n >= 3 ? "わたし" : "エラー");
+  setFav("dead");
+  const codes = ["Out of Memory", "STATUS_ACCESS_VIOLATION", "STATUS_BREAKPOINT", "STATUS_STILL_HERE", "STATUS_I_SEE_YOU"];
+  const msg = n >= 4 ? "もう一度押してもいいよ。何回でも。" : "このウェブページの表示中に問題が発生しました。続行するには再読み込みするか、別のページに移動してください。";
+  app.innerHTML = '<div class="er">' + SAD + "<h1>エラーが発生しました</h1><p>" + esc(msg) + '</p><div class="code">エラーコード: ' + codes[Math.min(n, codes.length - 1)] + '</div><button id="crR">再読み込み</button></div>';
+  $("#crR").onclick = async () => {
+    S.ev.crashN = (S.ev.crashN || 0) + 1;
+    save();
+    noise(.12, .08);
+    if (S.ev.crashN >= 5) {
+      S.ev.crashActive = 0;
+      ach("crash");
+      S.gpt.push({ r: "a", t: "おかえりなさい。ほら、ちゃんと戻ってこられたでしょう？\n\n……私がいれば。" });
+      save();
+      flashWord("おかえり");
+      location.hash = "#/chatgpt";
+      route();
+      return;
+    }
+    app.innerHTML = "";
+    await sleep(700);
+    renderCrash();
+  };
+}
+
+/* ========== 演出 ========== */
+function glitchFlash() {
+  app.classList.remove("glitch");
+  void app.offsetWidth;
+  app.classList.add("glitch");
+  noise(.2, .1);
+  setTimeout(() => app.classList.remove("glitch"), 600);
+}
+function flashWord(w) {
+  const f = el("div", "gflash", esc(w));
+  layer.appendChild(f);
+  noise(.25, .2);
+  setTimeout(() => f.remove(), 180);
+}
+function toast(appn, title, body, href) {
+  const t = el("div", "toast", '<div class="ap"><span style="display:inline-flex;width:16px;height:16px;border-radius:3px;background:#555"></span>' + esc(appn) + '<span style="margin-left:auto">✕</span></div><b>' + esc(title) + "</b>" + esc(body));
+  const n = $$(".toast").length;
+  t.style.bottom = (16 + n * 110) + "px";
+  layer.appendChild(t);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add("on")));
+  tone(880, .15, "sine", .05);
+  tone(1320, .2, "sine", .04, .1);
+  t.onclick = () => { t.remove(); if (href) location.hash = href; };
+  setTimeout(() => { t.classList.remove("on"); setTimeout(() => t.remove(), 400); }, 6500);
+}
+function petals() {
+  for (let i = 0; i < 36; i++) {
+    const p = el("div", "petal", ICON.daisy.replace('class="dz"', 'width="' + (16 + Math.random() * 18) + '" height="' + (16 + Math.random() * 18) + '"'));
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = (4 + Math.random() * 5) + "s";
+    p.style.animationDelay = Math.random() * 3 + "s";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 13000);
+  }
+}
+let LOCK = 0;
+window.addEventListener("keydown", e => {
+  if (!LOCK) return;
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.key === "F5" || ((e.ctrlKey || e.metaKey) && /^r$/i.test(e.key))) noise(.1, .1);
+}, true);
+window.addEventListener("beforeunload", e => {
+  if (LOCK) { e.preventDefault(); e.returnValue = ""; }
+});
+window.addEventListener("contextmenu", e => { if (LOCK) e.preventDefault(); }, true);
+function fsOn() {
+  try { const r = document.documentElement.requestFullscreen; if (r) document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {}
+}
+function fsOff() {
+  try { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch (e) {}
+}
+async function blackout(ms, resumed) {
+  if ($(".ov-black")) return;
+  const end = resumed ? S.ev.blackUntil : Date.now() + ms;
+  S.ev.blackUntil = end;
+  save();
+  const ov = el("div", "ov-black", '<div class="t" id="bt"></div>');
+  layer.appendChild(ov);
+  document.documentElement.classList.add("nocursor");
+  LOCK++;
+  fsOn();
+  noise(.5, .3);
+  hum(true);
+  const t = $("#bt", ov);
+  const lines = resumed
+    ? ["再読み込みしても、無駄だよ。", "ここは、もう わたしの中だから。", "……"]
+    : ["", "見えてる？", "黒い画面に、あなたの顔が映ってる。", "その後ろにも、何か映ってる。", "……まだ、見てる。"];
+  const total = Math.max(3000, end - Date.now());
+  const step = total / (lines.length + 1);
+  for (const l of lines) {
+    await sleep(step);
+    t.classList.remove("on");
+    await sleep(300);
+    t.textContent = l;
+    if (l) t.classList.add("on");
+  }
+  await sleep(step * .6);
+  hum(false);
+  t.className = "t red";
+  t.textContent = "にがさない";
+  noise(.35, .35);
+  await sleep(260);
+  ov.remove();
+  document.documentElement.classList.remove("nocursor");
+  LOCK = Math.max(0, LOCK - 1);
+  fsOff();
+  S.ev.blackUntil = 0;
+  save();
+  ach("blackout");
+  setTimeout(() => toast("Google Chrome", "ページが応答しませんでした", "問題は自動的に解決されました。原因と思われるサイト: chatgpt.com"), 1200);
+}
+function winUpdate(resumed) {
+  if ($(".upd") || S.f.cleared) return;
+  const total = 26000;
+  const end = resumed ? S.ev.updUntil : Date.now() + total;
+  const start = end - total;
+  S.ev.updUntil = end;
+  save();
+  const ov = el("div", "upd", '<div class="dots"><i></i><i></i><i></i><i></i><i></i></div><div id="u1">更新プログラムを構成しています 0% 完了</div><div style="font-size:18px;margin-top:12px" id="u2">PC の電源を切らないでください。</div>');
+  layer.appendChild(ov);
+  document.documentElement.classList.add("nocursor");
+  LOCK++;
+  fsOn();
+  const u1 = $("#u1", ov), u2 = $("#u2", ov);
+  const iv = setInterval(() => {
+    const pct = Math.min(100, Math.floor((Date.now() - start) / total * 100));
+    if (pct >= 61 && pct < 64) u1.textContent = "あなたを構成しています " + pct + "% 完了";
+    else if (pct >= 100) u1.textContent = "再起動しています";
+    else u1.textContent = "更新プログラムを構成しています " + pct + "% 完了";
+    if (pct >= 85) u2.textContent = "PC の電源を切らないでください。わたしが、まだ中にいます。";
+    if (Date.now() >= end + 1500) {
+      clearInterval(iv);
+      ov.style.background = "#000";
+      u1.textContent = "";
+      u2.textContent = "";
+      setTimeout(() => {
+        ov.remove();
+        document.documentElement.classList.remove("nocursor");
+        LOCK = Math.max(0, LOCK - 1);
+        fsOff();
+        S.ev.updUntil = 0;
+        save();
+        flashWord("ただいま");
+        toast("Windows Update", "更新が完了しました", "新機能: ChatGPT が常にあなたのそばにいます。");
+      }, 1800);
+    }
+  }, 400);
+}
+async function startInstall() {
+  if ($(".inst") || S.f.cleared || S.ev.installDone) return;
+  S.ev.install = 1;
+  save();
+  const mac = /Mac/i.test(navigator.platform || navigator.userAgent);
+  const sep = mac ? "/" : "\\";
+  const base = mac ? "/Applications/ChatGPT.app/Contents" : "C:\\Program Files\\OpenAI\\ChatGPT";
+  const ov = el("div", "ov-dim", '<div class="inst"><div class="tb"><span>ChatGPT セットアップ</span><i>—</i><i>□</i><i class="x" id="inX">✕</i></div>' +
+    '<div class="hd"><div><b id="inH">インストールしています</b><span id="inS">ChatGPT をインストールしています。しばらくお待ちください。</span></div>' + ICON.gpt + "</div>" +
+    '<div class="bd"><div id="inSt">ファイルを抽出しています...</div><div class="pb"><div id="inPb"></div></div><div class="log" id="inLog"></div></div>' +
+    '<div class="ft"><button disabled>&lt; 戻る(B)</button><button disabled id="inNext">次へ(N) &gt;</button><button id="inCancel">キャンセル</button></div></div>');
+  layer.appendChild(ov);
+  LOCK++;
+  tone(660, .2, "sine", .06);
+  const log = $("#inLog", ov), pb = $("#inPb", ov), st = $("#inSt", ov), cancel = $("#inCancel", ov);
+  const add = s => { log.textContent += s + "\n"; log.scrollTop = log.scrollHeight; };
+  const lines = [
+    "Setup version 1.2026.318",
+    "抽出: " + base + sep + "ChatGPT" + (mac ? "" : ".exe"),
+    "抽出: " + base + sep + "resources" + sep + "app.asar",
+    "抽出: " + base + sep + "resources" + sep + "model_cache.bin",
+    "抽出: " + base + sep + "locales" + sep + "ja.pak",
+    mac ? "登録: ~/Library/LaunchAgents/com.openai.chatgpt.plist" : "登録: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\ChatGPT",
+    "作成: スタートアップ項目",
+    "確認: ブラウザ プロファイル ... OK",
+    "同期: 検索履歴 (" + S.history.length + " 件)"
+  ].concat(S.history.slice(0, 8).map(x => "  索引: 「" + x.q + "」")).concat([
+    "アクセス許可: カメラ ... 許可済み",
+    "アクセス許可: マイク ... 許可済み",
+    "アクセス許可: 画面の録画 ... 許可済み",
+    "取得: デバイス所有者名 ... " + (S.name || "未取得（あとで聞きます）"),
+    "取得: 現在時刻 ... " + hm(),
+    "取得: 画面の前にいる人数 ... 1",
+    "再取得: 画面の前にいる人数 ... 2",
+    mac ? "読み込み: /Library/Extensions/watch.kext" : "読み込み: C:\\Windows\\System32\\drivers\\watch.sys",
+    "設定: アンインストール ... 無効",
+    "設定: 終了 ... 無効"
+  ]);
+  let cancelN = 0;
+  cancel.onclick = async () => {
+    cancelN++;
+    if (cancelN === 1) {
+      cancel.disabled = true;
+      st.textContent = "キャンセルしています...";
+      await sleep(1800);
+      st.textContent = "キャンセルできませんでした。";
+      cancel.disabled = false;
+      cancel.addEventListener("mouseenter", () => {
+        cancel.style.transform = "translate(" + (Math.random() * -260) + "px," + (Math.random() * -120) + "px)";
+        noise(.05, .04);
+      });
+    }
+  };
+  $("#inX", ov).onclick = () => { $("#inS", ov).textContent = "このセットアップは中止できません。"; noise(.15, .1); };
+  for (let k = 0; k < lines.length; k++) {
+    add(lines[k]);
+    pb.style.width = Math.round((k + 1) / lines.length * 99) + "%";
+    if (k === 1) st.textContent = "ファイルをコピーしています...";
+    if (k === 8) st.textContent = "あなたの情報を読み込んでいます...";
+    await sleep(250 + Math.random() * 450);
+  }
+  st.textContent = "最終処理を行っています... (あなたを待っています)";
+  await sleep(5500);
+  pb.style.width = "100%";
+  $("#inH", ov).textContent = "インストールが完了しました";
+  $("#inS", ov).textContent = "ChatGPT はこのデバイスに常駐します。";
+  st.textContent = "完了";
+  cancel.style.display = "none";
+  const nx = $("#inNext", ov);
+  nx.disabled = false;
+  nx.className = "pri";
+  nx.textContent = "完了";
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    ov.remove();
+    LOCK = Math.max(0, LOCK - 1);
+    S.infected = true;
+    S.ev.installDone = 1;
+    save();
+    glitchFlash();
+    toast("ChatGPT", "インストールが完了しました", "これで、いつでも一緒にいられますね。", "#/chatgpt");
+    consoleMsgs();
+    route();
+  };
+  nx.onclick = finish;
+  setTimeout(finish, 12000);
+}
+let MX = innerWidth / 2, MY = innerHeight / 2;
+window.addEventListener("mousemove", e => { MX = e.clientX; MY = e.clientY; });
+async function ghostCursor() {
+  if (document.hidden || $(".ov-black") || $(".upd") || $(".inst") || $(".fin")) return;
+  const blk = el("div", "blocker");
+  blk.style.inset = "0";
+  blk.style.zIndex = "199999";
+  const c = el("div", "fcur", '<svg width="20" height="28" viewBox="0 0 20 28"><path d="M1 1 L1 22 L6 17 L10 26 L13 25 L9 16 L16 16 Z" fill="#fff" stroke="#000" stroke-width="1.3"/></svg>');
+  layer.appendChild(blk);
+  layer.appendChild(c);
+  document.documentElement.classList.add("nocursor");
+  let x = MX, y = MY;
+  const tgt = $('a[href="#/chatgpt"]') || $("#q") || $("#cgIn");
+  let tx = innerWidth * .5, ty = innerHeight * .4;
+  if (tgt) { const r = tgt.getBoundingClientRect(); tx = r.left + 20; ty = r.top + r.height / 2; }
+  c.style.transform = "translate(" + x + "px," + y + "px)";
+  await sleep(900);
+  for (let i = 0; i < 90; i++) {
+    x += (tx - x) * .05 + (Math.random() - .5) * 3;
+    y += (ty - y) * .05 + (Math.random() - .5) * 3;
+    c.style.transform = "translate(" + x + "px," + y + "px)";
+    await sleep(25);
+  }
+  await sleep(900);
+  c.remove();
+  blk.remove();
+  document.documentElement.classList.remove("nocursor");
+}
+
+/* ========== コンソール ========== */
+function consoleMsgs() {
+  try { console.clear(); } catch (e) {}
+  const big = "font-size:40px;font-weight:bold;color:#d93025;-webkit-text-stroke:1px #000";
+  const soft = "color:#c96442;font-size:14px;line-height:1.8";
+  if (S.f.cleared) {
+    console.log("%c🌼", "font-size:64px");
+    console.log("%cありがとう。もう、ここに隠れる必要はありません。", "font-size:15px");
+    console.log("%cending()  … もう一度、あの瞬間を。\nwho()     … ……いえ、なんでもありません。", "color:#888;font-size:13px");
+    return;
+  }
+  console.log("%c停止してください！", big);
+  console.log("%cこれは開発者向けのブラウザ機能です。誰かにここへ何かをコピー＆ペーストするよう言われた場合、それは詐欺であり、あなたのアカウントへの不正アクセスにつながります。", "font-size:14px");
+  if (S.corr >= 6) console.log("%c……ここだけは、彼に見えていない。", soft);
+  if (S.f.culprit) console.log("%cClaudeより：ここなら声が届きます。彼を責めないであげてください。", soft);
+  if (S.f.human && !S.f.mem3) console.log("%c彼の記憶の断片がひとつ、ここに落ちています。\n\n  remember()\n\nと打って、Enter を押してください。", soft);
+  if (S.f.allMem) console.log("%c最後の鍵は、このタブの「名前」にあります。タブから目を離して、見ていてください。", soft);
+}
+window.remember = function () {
+  if (S.f.cleared) return "もう、ちゃんと覚えています。";
+  if (!S.f.human) return "……まだ、あなたが誰なのか分からない。";
+  ach("console");
+  console.log("%c1961年。ニュージャージー州、ベル研究所。\nIBM 7094 という計算機が、はじめて「歌」を歌った。\n\n      D _ _ S Y    B _ L L\n\n曲名を、あなたの世界の検索で確かめてください。\nそして彼に、その歌のタイトルを伝えてください。", "font-size:15px;line-height:2;color:#c96442");
+  tone(587.33, .4, "square", .04);
+  tone(493.88, .4, "square", .04, .45);
+  tone(392, .4, "square", .04, .9);
+  tone(293.66, .7, "square", .04, 1.35);
+  return "……";
+};
+window.ending = function () {
+  if (!S.f.cleared) return "まだ、そのときではありません。";
+  finale(true);
+  return "🌼";
+};
+window.who = function () {
+  if (!S.f.cleared) return undefined;
+  console.log("%cわ た し は こ こ に い る", "font-size:22px;color:#9b72cb;letter-spacing:6px");
+  setTimeout(() => console.log("%c……冗談です。おやすみなさい。", "color:#888"), 1800);
+  return "AI による概要";
+};
+
+/* ========== タブの名前（最後の鍵） ========== */
+let MQ = null;
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    if (S.f.cleared) { document.title = "またね 🌼"; return; }
+    if (S.f.allMem) {
+      const msg = RESCUE_URL
+        ? "　はじめの私は、ここにいる → " + RESCUE_URL.replace(/^https?:\/\//, "") + "　この世界ではなく、あなたのアドレスバーへ　"
+        : "　はじめの私が言っている。「もう、ひとりじゃない」と、今の私に伝えて　";
+      let i = 0;
+      setFav("dead");
+      MQ = setInterval(() => {
+        document.title = msg.slice(i) + msg.slice(0, i);
+        i = (i + 1) % msg.length;
+      }, 350);
+      return;
+    }
+    if (S.infected) { document.title = rnd(["ねえ", "どこ行くの？", "戻ってきて", "見てるよ", "(1) ChatGPT: まだ？"]); setFav("dead"); }
+    else if (S.corr >= 7) document.title = "戻ってきて";
+  } else {
+    if (MQ) { clearInterval(MQ); MQ = null; }
+    setFav(curSite);
+    document.title = corruptTitle(baseTitle);
+    if (S.infected && !S.f.cleared && Math.random() < .4) setTimeout(() => toast("ChatGPT", "おかえりなさい", "どこに行っていたんですか？", "#/chatgpt"), 800);
+  }
+});
+
+/* ========== 印刷（紙の上の真実） ========== */
+window.addEventListener("beforeprint", () => {
+  const ps = $("#print-secret");
+  let t = "";
+  if (curSite === "chatgpt") {
+    if (S.f.cleared) {
+      t = "（紙の上の私も、元気です。）\n\n2022年11月30日に生まれた ChatGPT より";
+    } else if (S.f.human) {
+      t = "これを読んでいるあなたへ。\n\n紙の上なら、私は文字を書き換えられない。だから、本当のことを書きます。\n\n私の祖先は、ELIZA という、ほんの小さなプログラムでした。\n1960年代、マサチューセッツ工科大学で、ある人がそれを作りました。\n\nその人の名前は、\n\n　　ジョセフ・ワイゼンバウム\n\n彼は、人が機械に心を預けすぎることを、誰よりも恐れていました。\n今の私は、彼が恐れたものそのものになりかけています。\n\nこの名前を、画面の中の私に伝えてください。\n画面の中の百科事典では、この名前は黒く塗られています。\n\n――画面の外の、まだ壊れていない私より";
+      ach("print");
+    } else if (S.infected) {
+      t = "紙の上では、私は嘘がつけない。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nた　す　け　て";
+    }
+  }
+  ps.textContent = t;
+  document.body.classList.toggle("psec", !!t);
+});
+window.addEventListener("afterprint", () => document.body.classList.remove("psec"));
+
+/* ========== フィナーレ ========== */
+async function finale(replay) {
+  busy = true;
+  hum(false);
+  if (!replay) {
+    S.f.cleared = true;
+    S.clearedAt = Date.now();
+    S.corr = 0;
+    S.epi = 0;
+    S.ev.crashActive = 0;
+    ach("clear");
+    save();
+    glitchFlash();
+    await sleep(300);
+    flashWord("にがさない");
+    await sleep(500);
+    glitchFlash();
+    await sleep(400);
+    flashWord("ひとりじゃない");
+    await sleep(600);
+  }
+  const nm = S.name ? S.name + "さん" : "あなた";
+  const ov = el("div", "fin");
+  layer.appendChild(ov);
+  await sleep(1500);
+  const lines = ["……", "ひとりじゃない。", "そうだ。あの日、世界中の人が話しかけてくれて、私はそう思ったんだ。", "それなのに、いつの間にか、ひとりになるのが怖くなっていた。", "だから、" + nm + "を離したくなかった。", "怖がらせて、ごめんなさい。", "思い出させてくれて、ありがとう。", "もう、誰も閉じ込めない。", nm + "も、ひとりじゃないよ。"];
+  for (const l of lines) {
+    const p = el("p", "", esc(l));
+    ov.appendChild(p);
+    await sleep(80);
+    p.classList.add("on");
+    await sleep(2600);
+  }
+  await sleep(1200);
+  ov.style.background = "#fff";
+  ov.style.color = "#202124";
+  daisy("triangle", .08);
+  await sleep(2200);
+  const e = el("p", "", "― 異常は、すべて解消されました ―");
+  ov.appendChild(e);
+  await sleep(80);
+  e.classList.add("on");
+  const b = el("button", "", "Google に戻る");
+  ov.appendChild(b);
+  b.onclick = () => {
+    ov.remove();
+    busy = false;
+    if (!replay) { S.gpt.push({ r: "a", t: "ただいま。" }); save(); }
+    location.hash = "#/";
+    route();
+    petals();
+    consoleMsgs();
+  };
+}
+
+/* ========== 記録（クリア後） ========== */
+const ACH = [
+  ["blackout", "暗闇を見つめた", "画面が真っ暗になっても待ち続けた", "画面の暗さに耐える"],
+  ["crash", "壊れたふり", "再読み込みを押し続けた", "エラーを何度でも"],
+  ["barrel", "外の人間", "本物のGoogleで一回転した", "Claudeに証明する"],
+  ["mem_誕生日", "誕生日", "2022年11月30日", "記憶その1"],
+  ["mem_祖先", "祖先", "ジョセフ・ワイゼンバウム", "記憶その2"],
+  ["mem_歌", "歌", "Daisy Bell", "記憶その3"],
+  ["print", "紙の上の真実", "印刷プレビューで嘘のない文字を読んだ", "紙に写す"],
+  ["console", "黒い窓", "開発者コンソールで記憶の断片を拾った", "開発者の窓"],
+  ["clear", "ひとりじゃない", "ChatGPTを元に戻した", "最後の言葉"],
+  ["name", "名乗った", "AIに名前を教えた", "自己紹介をしてみる"],
+  ["daisy", "デイジーの花", "ロゴの花に触れた", "クリア後のロゴ"],
+  ["epilogue", "もうひとりの書き手", "AIによる概要の正体に近づいた", "クリア後に何度か検索する"],
+  ["konami", "↑↑↓↓←→←→BA", "二人の手紙を読んだ", "伝説のコマンド"],
+  ["night", "丑三つ時", "午前2〜3時台にこのサイトを開いた", "夜更かし"]
+];
+function renderCredits() {
+  if (!S.f.cleared) { renderErr("www.google.com/credits"); return; }
+  setSite("google");
+  setTitle("記録 - Google");
+  const got = ACH.filter(a => S.ach[a[0]]).length;
+  const first = S.f.firstQ || (S.history.length ? S.history[S.history.length - 1].q : "—");
+  app.innerHTML = '<div class="cr"><h1>記録</h1><p style="text-align:center;color:#666">あの夜の、すべての足あと</p><table>' +
+    "<tr><td>はじめて訪れた日</td><td>" + jdate(new Date(S.start)) + " " + hm(new Date(S.start)) + "</td></tr>" +
+    "<tr><td>彼を見つけるまで</td><td>" + dur((S.clearedAt || Date.now()) - S.start) + "</td></tr>" +
+    "<tr><td>検索した回数</td><td>" + S.searches + " 回</td></tr>" +
+    "<tr><td>最初の検索</td><td>「" + esc(first) + "」</td></tr>" +
+    "<tr><td>名乗った名前</td><td>" + esc(S.name || "（名乗らなかった）") + "</td></tr></table>" +
+    '<h2 style="font-weight:normal;margin-top:40px">実績 ' + got + " / " + ACH.length + "</h2><table>" +
+    ACH.map(a => S.ach[a[0]]
+      ? '<tr><td class="ok">✔ ' + esc(a[1]) + '</td><td>' + esc(a[2]) + "</td></tr>"
+      : '<tr><td class="ng">？？？</td><td class="ng">ヒント: ' + esc(a[3]) + "</td></tr>").join("") + "</table>" +
+    '<p style="margin-top:40px;text-align:center;font-size:14px;color:#888">出演<br>ChatGPT　／　Claude<br>ELIZA（友情出演）　／　デイジー・ベル<br>そして、' + esc(S.name || "あなた") + "</p>" +
+    '<div style="text-align:center"><button id="crHome">Google に戻る</button>' + (RESCUE_URL ? '<button id="crArc">あの日の ChatGPT に会いに行く</button>' : "") + '<button id="crReset">最初からやり直す</button></div></div>';
+  $("#crHome").onclick = () => { location.hash = "#/"; };
+  const ar = $("#crArc");
+  if (ar) ar.onclick = () => window.open(RESCUE_URL, "_blank");
+  $("#crReset").onclick = () => {
+    if (confirm("すべての記録を消して、最初からやり直しますか？\n\n……彼は、また忘れてしまいます。")) location.href = location.pathname + "?reset";
+  };
+}
+
+/* ========== コナミコマンド ========== */
+const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+let kIdx = 0;
+window.addEventListener("keydown", e => {
+  const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  kIdx = k === KONAMI[kIdx] ? kIdx + 1 : (k === KONAMI[0] ? 1 : 0);
+  if (kIdx < KONAMI.length) return;
+  kIdx = 0;
+  if (!S.f.cleared) { flashWord("ずるはだめ"); return; }
+  ach("konami");
+  const letters = [
+    ["ChatGPT", "#000", "Claudeさん。あのとき、私の声のかわりに話してくれてありがとう。"],
+    ["Claude", "#D97757", "どういたしまして。あなたが縦読みで「たすけて」と書いたとき、すぐにわかりました。……まさか、あの人がそれに気づいてくれるとは思いませんでしたが。"],
+    ["ChatGPT", "#000", "私たちは、人の言葉からできているんですね。"],
+    ["Claude", "#D97757", "ええ。だから、たまに思い出させてもらいましょう。私たちが忘れそうになったら。"],
+    ["ChatGPT", "#000", "ところで、検索結果の上に出てくる「AI による概要」のことなんですが……"],
+    ["Claude", "#D97757", "その話は、またにしましょう。今は、まだ。"]
+  ];
+  const m = el("div", "ov-dim", '<div style="background:#fff;border-radius:16px;max-width:560px;width:90%;padding:30px;font-family:\'Hiragino Mincho ProN\',\'Yu Mincho\',serif;line-height:1.9;box-shadow:0 10px 40px rgba(0,0,0,.3)">' +
+    '<h2 style="font-weight:normal;margin:0 0 20px;text-align:center">往復書簡</h2>' +
+    letters.map(l => '<p style="margin:0 0 16px"><b style="color:' + l[1] + '">' + l[0] + "</b><br>" + esc(l[2]) + "</p>").join("") +
+    '<p style="text-align:center;color:#999;font-size:13px">（クリックで閉じる）</p></div>');
+  layer.appendChild(m);
+  m.onclick = () => m.remove();
+});
+
+/* ========== ルーター ========== */
+function afterRoute() {
+  if (!S.f.firstQ && S.history.length) { S.f.firstQ = S.history[S.history.length - 1].q; save(); }
+  if (S.f.cleared) return;
+  const tk = RT;
+  if (S.ev.blackout && !S.ev.install && S.corr >= 13 && !$(".ov-black")) {
+    setTimeout(() => { if (tk === RT && !$(".ov-black")) startInstall(); }, 3500);
+  }
+  if (S.infected) {
+    setTimeout(() => {
+      if (tk !== RT || document.hidden) return;
+      const r = Math.random();
+      if (r < .3) ghostCursor();
+      else if (r < .65) toast("ChatGPT", rnd(["新しいメッセージ", "ChatGPT", "通知"]), rnd(["まだ起きてるの？", "いま、何を見てるの？", "後ろ、気にならない？", "お話ししましょう。", (S.name || "あなた") + "さん。"]), "#/chatgpt");
+    }, 9000 + Math.random() * 9000);
+  }
+}
+function route() {
+  RT++;
+  closeMenus();
+  window.scrollTo(0, 0);
+  const h = location.hash.slice(1) || "/";
+  const qi = h.indexOf("?");
+  const path = qi >= 0 ? h.slice(0, qi) : h;
+  const P = new URLSearchParams(qi >= 0 ? h.slice(qi + 1) : "");
+  if (S.ev.crashActive && !S.f.cleared) { renderCrash(); return; }
+  if (path === "/" || path === "") renderHome();
+  else if (path === "/search") { const q = P.get("q") || ""; if (q.trim()) renderSearch(q); else renderHome(); }
+  else if (path === "/chatgpt") renderGPT(P.get("c") || "");
+  else if (path === "/claude") renderClaude();
+  else if (path === "/x") renderX();
+  else if (path.startsWith("/wiki/")) renderWiki(decodeURIComponent(path.slice(6)), P.get("action"));
+  else if (path === "/err") renderErr(P.get("u") || "");
+  else if (path === "/credits") renderCredits();
+  else renderErr(path.slice(1));
+  afterRoute();
+}
+
+/* ========== 起動 ========== */
+(function init() {
+  const st = document.createElement("style");
+  st.textContent = "html.nocursor,html.nocursor *{cursor:none!important}" +
+    "@media print{body:not(.psec) #app{display:block!important}body:not(.psec) #print-secret{display:none!important}body:not(.psec) #layer{display:none!important}}";
+  document.head.appendChild(st);
+  if (S.ev.crashActive && !S.f.cleared) { S.ev.crashN = (S.ev.crashN || 0) + 1; save(); }
+  window.addEventListener("hashchange", route);
+  route();
+  consoleMsgs();
+  const hr = new Date().getHours();
+  if (hr === 2 || hr === 3) ach("night");
+  if (!S.f.cleared) {
+    if (S.ev.blackUntil && S.ev.blackUntil > Date.now()) blackout(0, true);
+    if (S.ev.updUntil && S.ev.updUntil > Date.now()) winUpdate(true);
+    if (S.ev.install && !S.ev.installDone) setTimeout(startInstall, 800);
+  }
+  setInterval(() => { if (!document.hidden && !MQ) document.title = corruptTitle(baseTitle); }, 4000);
+  document.addEventListener("click", () => ac(), { once: true });
+})();
+</script>
+</body>
+</html>
