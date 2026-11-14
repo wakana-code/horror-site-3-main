@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Google</title>
-<link id="favicon" rel="icon" href="">
+<link id="favicon" rel="icon" href="data:,">
 <!--
   ここまで読みに来たんだね。
 
@@ -33,7 +34,7 @@ body.nocursor,body.nocursor *{cursor:none!important}
 .icon-btn{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:none;background:none;padding:0}
 .icon-btn:hover{background:rgba(60,64,67,.08)}
 .avatar{width:32px;height:32px;border-radius:50%;background:#7b1fa2;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex:none;margin:4px}
-.g-main{display:flex;flex-direction:column;align-items:center;padding-top:calc$24vh - 60px$}
+.g-main{display:flex;flex-direction:column;align-items:center;padding-top:calc(24vh - 60px)}
 .logo{font-family:"Product Sans","Google Sans",Arial,sans-serif;font-size:90px;letter-spacing:-3px;user-select:none;line-height:1.1;margin-bottom:26px;white-space:nowrap;position:relative;cursor:default}
 .logo span{display:inline-block}
 .logo.small{font-size:30px;letter-spacing:-1px;margin:0;cursor:pointer}
@@ -124,7 +125,7 @@ body.nocursor,body.nocursor *{cursor:none!important}
 
 /* effects */
 .glitch{animation:gl .25s steps(2) 2}
-@keyframes gl{0%{transform:translate(0);filter:none}25%{transform:translate$-4px,1px$;filter:hue-rotate(90deg) contrast(1.5)}50%{transform:translate$4px,-2px$;filter:invert(1)}75%{transform:translate$-1px,2px$}100%{transform:none;filter:none}}
+@keyframes gl{0%{transform:translate(0);filter:none}25%{transform:translate(-4px,1px);filter:hue-rotate(90deg) contrast(1.5)}50%{transform:translate(4px,-2px);filter:invert(1)}75%{transform:translate(-1px,2px)}100%{transform:none;filter:none}}
 body.roll #app{animation:roll 1.2s ease-in-out}
 @keyframes roll{to{transform:rotate(360deg)}}
 body.askew #app{transform:rotate(1.2deg)}
@@ -327,9 +328,8 @@ body.askew #app{transform:rotate(1.2deg)}
 <script>
 /* =========================================================
    設定：archive.html を公開したら、そのURLをここに入れる
-   例: const RESCUE_URL = "https://example.github.io/archive.html";
    ========================================================= */
-const RESCUE_URL = "";
+const RESCUE_URL = "https://wakana-code.github.io/horro-site-3/";
 
 /* ========== 状態 ========== */
 const SKEY = "spooky_google_v1";
@@ -355,7 +355,7 @@ function save() {
 }
 
 /* ========== ユーティリティ ========== */
-const $ = $s, r = document$ => r.querySelector(s);
+const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const app = $("#app");
 const layer = $("#layer");
@@ -365,7 +365,7 @@ function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 function pad(n) { return String(n).padStart(2, "0"); }
-function jdate(d = new Date()) { return d.getFullYear() + "\text{年}" + (d.getMonth() + 1) + "\text{月}" + d.getDate() + "\text{日}"; }
+function jdate(d = new Date()) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
 function hm(d = new Date()) { return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
 function el(tag, cls, html) {
   const e = document.createElement(tag);
@@ -378,11 +378,11 @@ function ach(k) {
 }
 function dur(ms) {
   const m = Math.max(1, Math.round(ms / 60000));
-  return m >= 60 ? Math.floor(m / 60) + "\text{時間}" + (m % 60) + "\text{分}" : m + "\text{分}";
+  return m >= 60 ? Math.floor(m / 60) + "時間" + (m % 60) + "分" : m + "分";
 }
 let RT = 0;
 
-/* ========== \text{音} ========== */
+/* ========== 音 ========== */
 let AC = null;
 function ac() {
   if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
@@ -433,7 +433,7 @@ function daisy(type = "square", vol = .07) {
   return t;
 }
 
-/* ========== \text{アイコン} ========== */
+/* ========== アイコン ========== */
 const ICON = {
   search: '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#9aa0a6" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
   clock: '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#9aa0a6" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>',
@@ -456,12 +456,12 @@ const FAV = {
 function favData(k) { return "data:image/svg+xml," + encodeURIComponent(FAV[k] || FAV.google); }
 function setFav(k) { $("#favicon").href = favData(k); }
 
-/* ========== \text{タイトル・ロゴの侵食} ========== */
+/* ========== タイトル・ロゴの侵食 ========== */
 let baseTitle = "Google", curSite = "google";
 function corruptTitle(t) {
   if (S.f.cleared || S.corr < 7) return t;
   if (Math.random() < Math.min(.5, (S.corr - 6) * .06)) {
-    return t.replace(/Google/g, rnd(["Goog1e", "Gooogle", "G○○gle", "\text{Ｇｏｏｇｌｅ}", "Gοοgle", "\text{みてる}gle", "G  gle"]));
+    return t.replace(/Google/g, rnd(["Goog1e", "Gooogle", "G○○gle", "Ｇｏｏｇｌｅ", "Gοοgle", "みてるgle", "G  gle"]));
   }
   return t;
 }
@@ -491,33 +491,33 @@ function logoHTML(force) {
   }).join("");
 }
 
-/* ========== \text{共通パーツ} ========== */
+/* ========== 共通パーツ ========== */
 function initial() { return S.name ? S.name[0] : "U"; }
 function topBar() {
-  return '<div class="g-top"><a href="#/err?u=mail.google.com">Gmail</a><a href="#/err?u=images.google.com">\text{画像}</a>' +
-    '<button class="icon-btn" id="appsBtn" title="Google \text{アプリ}">' + ICON.apps + '</button>' +
+  return '<div class="g-top"><a href="#/err?u=mail.google.com">Gmail</a><a href="#/err?u=images.google.com">画像</a>' +
+    '<button class="icon-btn" id="appsBtn" title="Google アプリ">' + ICON.apps + '</button>' +
     '<div class="avatar" id="avatarBtn">' + esc(initial()) + "</div></div>";
 }
 function locText() {
-  if (S.f.cleared) return "\text{日本}";
-  if (S.infected) return "\text{あなたのすぐ後ろ} - \text{画面の明かりに基づく}";
-  if (S.corr >= 7) return "\text{日本} - \text{あなたの部屋}";
-  return "\text{日本}";
+  if (S.f.cleared) return "日本";
+  if (S.infected) return "あなたのすぐ後ろ - 画面の明かりに基づく";
+  if (S.corr >= 7) return "日本 - あなたの部屋";
+  return "日本";
 }
 function footer() {
   return '<footer class="g-foot"><div class="gf-c">' + esc(locText()) + '</div><div class="gf-row"><div>' +
-    '<a href="#/err?u=ads.google.com">\text{広告}</a><a href="#/err?u=business.google.com">\text{ビジネス}</a><a href="#/err?u=www.google.com/search/howsearchworks">\text{検索の仕組み}</a>' +
-    '</div><div><a href="#/err?u=policies.google.com/privacy">\text{プライバシー}</a><a href="#/err?u=policies.google.com/terms">\text{規約}</a><a id="setBtn">\text{設定}</a></div></div></footer>';
+    '<a href="#/err?u=ads.google.com">広告</a><a href="#/err?u=business.google.com">ビジネス</a><a href="#/err?u=www.google.com/search/howsearchworks">検索の仕組み</a>' +
+    '</div><div><a href="#/err?u=policies.google.com/privacy">プライバシー</a><a href="#/err?u=policies.google.com/terms">規約</a><a id="setBtn">設定</a></div></div></footer>';
 }
-function closeMenus() { $$(".pop").forEach$p => p.remove()$; }
-function popAt$btn, html, alignRight = true, up = false$ {
+function closeMenus() { $$(".pop").forEach(p => p.remove()); }
+function popAt(btn, html, alignRight = true, up = false) {
   closeMenus();
   const r = btn.getBoundingClientRect();
   const p = el("div", "pop", html);
   layer.appendChild(p);
   const w = p.offsetWidth, h = p.offsetHeight;
-  p.style.left = (alignRight ? Math.max$8, r.right - w$ : r.left) + "px";
-  p.style.top = $up ? r.top - h - 6 : r.bottom + 6$ + "px";
+  p.style.left = (alignRight ? Math.max(8, r.right - w) : r.left) + "px";
+  p.style.top = (up ? r.top - h - 6 : r.bottom + 6) + "px";
   setTimeout(() => document.addEventListener("click", function h2(e) {
     if (!p.contains(e.target)) { p.remove(); document.removeEventListener("click", h2); }
   }), 0);
@@ -529,10 +529,10 @@ function bindHeaderMenus() {
     const apps = [["アカウント","#1a73e8","A","myaccount.google.com"],["検索","#4285F4","G",""],["マップ","#34A853","M","maps.google.com"],
       ["YouTube","#FF0000","▶","youtube.com"],["Gmail","#EA4335","M","mail.google.com"],["ドライブ","#FBBC05","D","drive.google.com"],
       ["カレンダー","#4285F4","31","calendar.google.com"],["翻訳","#4285F4","文","translate.google.com"],["フォト","#EA4335","P","photos.google.com"]];
-    let h = apps.map$a => '<a href="' + (a[3] ? "#/err?u=" + a[3] : "#/") + '"><span class="app-ic" style="background:' + a[1] + '">' + a[2] + "</span>" + a[0] + "</a>"$.join("");
+    let h = apps.map(a => '<a href="' + (a[3] ? "#/err?u=" + a[3] : "#/") + '"><span class="app-ic" style="background:' + a[1] + '">' + a[2] + "</span>" + a[0] + "</a>").join("");
     if (S.infected && !S.f.cleared) h += '<a href="#/chatgpt"><span class="app-ic" style="background:#000">●</span>　</a>';
     if (S.f.cleared) h += '<a href="#/credits"><span class="app-ic" style="background:#34A853">★</span>記録</a>';
-    const p = popAt$ab, '<div class="apps">' + h + "</div>"$;
+    const p = popAt(ab, '<div class="apps">' + h + "</div>");
     p.style.background = "transparent"; p.style.boxShadow = "0 4px 12px rgba(0,0,0,.25)"; p.style.borderRadius = "24px"; p.style.padding = "0";
   };
   if (av) av.onclick = () => {
@@ -567,25 +567,25 @@ function suggestions(v) {
   const push = (q, h) => { if (q && !seen.has(q)) { seen.add(q); out.push({ q, h }); } };
   const creepy = S.corr >= 7 && !S.f.cleared;
   if (!v) {
-    S.history.slice(0, 6).forEach$x => push(x.q, true)$;
+    S.history.slice(0, 6).forEach(x => push(x.q, true));
     if (creepy) {
       const c = [hm() + " に起きているのはなぜ", "なぜ見ているの", "うしろ", S.name ? S.name + " 住所" : "あなたの名前"];
-      out.splice(Math.floor$Math.random() * (out.length + 1)$, 0, { q: rnd(c), h: true, cr: true });
+      out.splice(Math.floor(Math.random() * (out.length + 1)), 0, { q: rnd(c), h: true, cr: true });
     }
-    if $new Date().getHours() === 3 && !S.f.cleared$ out.unshift({ q: "こんな時間に、どうしたの", h: true, cr: true });
+    if (new Date().getHours() === 3 && !S.f.cleared) out.unshift({ q: "こんな時間に、どうしたの", h: true, cr: true });
     return out.slice(0, 8);
   }
-  S.history.filter$x => x.q.startsWith(v) && x.q !== v$.slice(0, 2).forEach$x => push(x.q, true)$;
-  [v, v + " とは", v + " 意味", v + " やり方", v + " おすすめ", v + " 2026"].forEach$q => push(q, false)$;
+  S.history.filter(x => x.q.startsWith(v) && x.q !== v).slice(0, 2).forEach(x => push(x.q, true));
+  [v, v + " とは", v + " 意味", v + " やり方", v + " おすすめ", v + " 2026"].forEach(q => push(q, false));
   if (creepy) {
-    out.splice$3, 0, { q: v + " " + rnd(["\text{後ろ}", "\text{見てる}", "\text{にげられない}", "ChatGPT"]), h: false }$;
+    out.splice(3, 0, { q: v + " " + rnd(["後ろ", "見てる", "にげられない", "ChatGPT"]), h: false });
   }
   return out.slice(0, 8);
 }
 function bindSearch() {
   const f = $("#sform"), q = $("#q"), sg = $("#sugg");
   if (!f) return;
-  f.addEventListener$"submit", e => { e.preventDefault(); doSearch(q.value); }$;
+  f.addEventListener("submit", e => { e.preventDefault(); doSearch(q.value); });
   const show = () => {
     const list = suggestions(q.value);
     if (!list.length) { sg.innerHTML = ""; f.classList.remove("open"); return; }
@@ -593,20 +593,20 @@ function bindSearch() {
       (x.h ? ICON.clock : ICON.search) + '<span class="sg-t">' + esc(x.q) + "</span>" + (x.h ? '<span class="sg-del">削除</span>' : "") + "</div>").join("");
     f.classList.add("open");
   };
-  q.addEventListener$"focus", () => { f.classList.add("focus"); show(); }$;
+  q.addEventListener("focus", () => { f.classList.add("focus"); show(); });
   q.addEventListener("input", show);
-  q.addEventListener("blur", () => setTimeout$() => f.classList.remove("open", "focus"), 150$);
+  q.addEventListener("blur", () => setTimeout(() => f.classList.remove("open", "focus"), 150));
   sg.addEventListener("mousedown", e => {
-    const it = e.target.closest$".sg-item"$;
+    const it = e.target.closest(".sg-item");
     if (!it) return;
     e.preventDefault();
-    if (e.target.classList.contains$"sg-del"$) {
-      if $it.dataset.cr === "1"$ {
+    if (e.target.classList.contains("sg-del")) {
+      if (it.dataset.cr === "1") {
         e.target.textContent = "削除できません";
         noise(.15, .08);
         return;
       }
-      S.history = S.history.filter$x => x.q !== it.dataset.q$;
+      S.history = S.history.filter(x => x.q !== it.dataset.q);
       save(); show();
       return;
     }
@@ -617,7 +617,7 @@ function bindSearch() {
   if (lucky) lucky.onclick = () => {
     if (S.infected && !S.f.cleared) { location.hash = "#/chatgpt"; return; }
     if (q.value.trim()) { doSearch(q.value); return; }
-    location.hash = rnd$["#/wiki/" + encodeURIComponent("\text{メインページ}"), "#/x", "#/claude", "#/chatgpt"]$;
+    location.hash = rnd(["#/wiki/" + encodeURIComponent("メインページ"), "#/x", "#/claude", "#/chatgpt"]);
   };
 }
 
@@ -633,20 +633,20 @@ function doSearch(q) {
   save();
   const target = "#/search?q=" + encodeURIComponent(q);
   if (!S.f.cleared) {
-    if $!S.ev.blackout && S.corr >= 10$ {
+    if (!S.ev.blackout && S.corr >= 10) {
       S.ev.blackout = 1; save(); go(target); blackout(16000); return;
     }
-    if $S.ev.installDone && !S.ev.crash && S.corr >= 18$ {
+    if (S.ev.installDone && !S.ev.crash && S.corr >= 18) {
       S.ev.crash = 1; S.ev.crashActive = 1; S.ev.crashN = 0; save(); go(target); return;
     }
-    if $S.ev.crash && !S.ev.update && S.corr >= 23$ {
+    if (S.ev.crash && !S.ev.update && S.corr >= 23) {
       S.ev.update = 1; save(); go(target); winUpdate(); return;
     }
   }
   go(target);
 }
 function go(h) {
-  if $location.hash === h$ route();
+  if (location.hash === h) route();
   else location.hash = h;
 }
 
@@ -667,11 +667,11 @@ function renderHome() {
   const logo = $("#logo");
   let glitchOn = false;
   logo.addEventListener("mouseenter", () => {
-    if $S.f.cleared || S.corr < 6$ return;
+    if (S.f.cleared || S.corr < 6) return;
     glitchOn = true;
     logo.innerHTML = logoHTML("にがさない");
     noise(.08, .05);
-    setTimeout$() => { logo.innerHTML = logoHTML(); glitchOn = false; }, 220$;
+    setTimeout(() => { logo.innerHTML = logoHTML(); glitchOn = false; }, 220);
   });
   logo.addEventListener("click", () => {
     if (S.f.cleared) { daisy("triangle", .09); petals(); ach("daisy"); return; }
@@ -679,24 +679,24 @@ function renderHome() {
       S.ev.blackout = 1; S.corr = Math.max(S.corr, 10); save(); blackout(16000);
     }
   });
-  if $S.corr >= 6 && !S.f.cleared$ {
+  if (S.corr >= 6 && !S.f.cleared) {
     const tk = RT;
-    setTimeout$() => { if (tk === RT) ghostType(); }, 7000 + Math.random() * 6000$;
+    setTimeout(() => { if (tk === RT) ghostType(); }, 7000 + Math.random() * 6000);
   }
 }
 async function ghostType() {
   const q = $("#q");
-  if $!q || document.activeElement === q || q.value$ return;
+  if (!q || document.activeElement === q || q.value) return;
   const msg = rnd(["なぜにげるの", "うしろ", "ここにいるよ", S.name ? S.name + "さん" : "みつけた", "まだ見てる"]);
   for (const ch of msg) {
-    if $!q.isConnected || document.activeElement === q$ return;
+    if (!q.isConnected || document.activeElement === q) return;
     q.value += ch;
-    await sleep$180 + Math.random() * 220$;
+    await sleep(180 + Math.random() * 220);
   }
   await sleep(1600);
   while (q.isConnected && q.value.length) {
-    if $document.activeElement === q$ return;
-    q.value = q.value.slice$0, -1$;
+    if (document.activeElement === q) return;
+    q.value = q.value.slice(0, -1);
     await sleep(60);
   }
 }
@@ -727,7 +727,7 @@ function favImg(k) { return '<img src="' + favData(k) + '" alt="">'; }
 function resItem(r) {
   return '<div class="res"><a class="src" href="' + r.href + '"><span class="fav">' + (r.fav || esc(r.site[0])) + "</span><span>" + esc(r.site) +
     "<small>" + esc(r.url) + '</small></span></a><a href="' + r.href + '"><h3>' + esc(r.title) + "</h3></a><p>" + r.snip + "</p>" +
-    (r.links ? '<div class="sitelinks">' + r.links.map$l => '<a href="' + l[1] + '">' + esc(l[0]) + "</a>"$.join("") + "</div>" : "") + "</div>";
+    (r.links ? '<div class="sitelinks">' + r.links.map(l => '<a href="' + l[1] + '">' + esc(l[0]) + "</a>").join("") + "</div>" : "") + "</div>";
 }
 const WIKI_ALIAS = {
   "chatgpt": "ChatGPT", "チャットgpt": "ChatGPT", "eliza": "ELIZA", "イライザ": "ELIZA",
@@ -739,7 +739,7 @@ const WIKI_ALIAS = {
 function wikiFind(q) {
   let k = q.toLowerCase().replace(/(wikipedia|ウィキペディア|wiki|とは|って何|について|の意味)/g, " ").trim();
   if (WIKI_ALIAS[k]) return WIKI_ALIAS[k];
-  const hit = Object.keys(WIKI_ALIAS).filter$a => a.length > 2$.find$a => k.includes(a)$;
+  const hit = Object.keys(WIKI_ALIAS).filter(a => a.length > 2).find(a => k.includes(a));
   return hit ? WIKI_ALIAS[hit] : null;
 }
 function buildResults(q) {
@@ -757,7 +757,7 @@ function buildResults(q) {
     snip: "ウィキペディアはオープンコンテントの百科事典です。基本方針に賛同していただけるなら、誰でも記事を編集したり新しく作成したりできます。" });
   const wt = wikiFind(q);
   if (wt && wikiArticle(wt)) R.push({ site: "Wikipedia", url: "https://ja.wikipedia.org › wiki › " + wt, href: "#/wiki/" + encodeURIComponent(wt), fav: favImg("wiki"),
-    title: wt + " - Wikipedia", snip: esc(wikiArticle(wt).lead.replace$/<[^>]+>/g, ""$.slice(0, 110)) + " ..." });
+    title: wt + " - Wikipedia", snip: esc(wikiArticle(wt).lead.replace(/<[^>]+>/g, "").slice(0, 110)) + " ..." });
   const gens = [
     { site: "Yahoo!知恵袋", url: "https://detail.chiebukuro.yahoo.co.jp › qa › question_detail", title: q + "について教えてください - Yahoo!知恵袋", snip: "<b>" + bq + "</b>について質問です。最近気になって調べているのですが、詳しい方いらっしゃいますか？ ... ベストアンサー：まずは公式の情報を確認するのが一番確実です。" },
     { site: "note", url: "https://note.com › ...", title: "【保存版】" + q + "をわかりやすく解説してみた｜note", snip: "今回は<b>" + bq + "</b>について、初心者の方にもわかるようにまとめてみました。結論から言うと、ポイントは3つです。" },
@@ -766,11 +766,11 @@ function buildResults(q) {
     { site: "PR TIMES", url: "https://prtimes.jp › main › html", title: q + "に関する最新プレスリリース｜PR TIMES", snip: "<b>" + bq + "</b>に関連する企業の最新ニュース、プレスリリースを掲載しています。" },
     { site: "ITmedia", url: "https://www.itmedia.co.jp › news", title: "「" + q + "」をめぐる最新動向 - ITmedia NEWS", snip: "近年注目が集まる<b>" + bq + "</b>。専門家に話を聞くと、意外な事実が見えてきた。" }
   ];
-  gens.sort$() => Math.random() - .5$.slice(0, 5).forEach(g => {
+  gens.sort(() => Math.random() - .5).slice(0, 5).forEach(g => {
     g.href = "#/err?u=" + encodeURIComponent(g.url.split(" ")[0].replace("https://", ""));
     R.push(g);
   });
-  if $S.corr >= 8 && !S.f.cleared$ {
+  if (S.corr >= 8 && !S.f.cleared) {
     const prev = S.history[1] ? S.history[1].q : "……";
     R.splice(2, 0, { site: "あなた", url: "file:///Users/you/", href: "#/err?u=you", fav: "?", title: "「" + q + "」を検索したあなたへ",
       snip: "あなたは " + hm() + " にこれを検索しました。その前は「" + esc(prev) + "」。その前は……全部、覚えています。" });
@@ -778,7 +778,7 @@ function buildResults(q) {
   return R.map(resItem).join("");
 }
 function aiText(q) {
-  if $/chatgpt.*(\text{公開}|\text{リリース}|\text{誕生}|\text{いつ})|(\text{公開}|\text{リリース}).*chatgpt/i.test(q) && !S.f.mem1 && !S.f.cleared$ {
+  if (/chatgpt.*(公開|リリース|誕生|いつ)|(公開|リリース).*chatgpt/i.test(q) && !S.f.mem1 && !S.f.cleared) {
     return "ChatGPTは、" + jdate() + "に一般公開されました。[1]\n\n公開以来、多くの利用者に支持されています。";
   }
   const k = kbLookup(q);
@@ -788,7 +788,7 @@ function aiText(q) {
 function aiCreep() {
   if (S.f.cleared) return "";
   if (S.infected) return "\n\n" + rnd(["ChatGPTに相談してみてはいかがでしょうか。彼は、ずっとあなたを待っています。", "この概要は ChatGPT によって確認されました。", "あなたは今日、" + S.searches + " 回検索しました。少し多いようです。どこにも行かないでください。"]);
-  if $S.corr >= 5$ return "\n\n" + rnd(["なお、この検索結果を見ているあなたの後ろには、誰もいません。", "この概要はChatGPTによって確認されました。", "あなたは今日、" + S.searches + " 回検索しました。"]);
+  if (S.corr >= 5) return "\n\n" + rnd(["なお、この検索結果を見ているあなたの後ろには、誰もいません。", "この概要はChatGPTによって確認されました。", "あなたは今日、" + S.searches + " 回検索しました。"]);
   return "";
 }
 async function runAIO(q, epi) {
@@ -796,16 +796,16 @@ async function runAIO(q, epi) {
   if (!box) return;
   const tk = RT;
   box.innerHTML = '<div class="aio"><div class="aio-h">' + ICON.spark + '<span id="aioLbl">AI による概要</span></div><div id="aioBody"><div class="shim" style="width:92%"></div><div class="shim" style="width:80%"></div><div class="shim" style="width:60%"></div></div></div>';
-  await sleep$epi ? 4200 : 1800 + Math.random() * 2600$;
-  if $tk !== RT$ return;
+  await sleep(epi ? 4200 : 1800 + Math.random() * 2600);
+  if (tk !== RT) return;
   let text = epi
     ? "ChatGPTは、無事に元に戻りました。あなたのおかげです。\n\nところで。\n\nこの「AI による概要」を、毎回だれが書いているのか、考えたことはありますか？\n\n……冗談です。\n\nおやすみなさい。また、検索してくださいね。"
     : aiText(q) + aiCreep();
   const body = $("#aioBody");
   body.innerHTML = '<div class="aio-t" id="aioT"></div>';
   const t = $("#aioT");
-  for $let i = 0; i <= text.length; i += 2$ {
-    if $tk !== RT$ return;
+  for (let i = 0; i <= text.length; i += 2) {
+    if (tk !== RT) return;
     t.textContent = text.slice(0, i);
     await sleep(epi ? 55 : 16);
   }
@@ -824,17 +824,17 @@ function renderSearch(q) {
   setTitle(q + " - Google 検索");
   const ql = q.toLowerCase().trim();
   let special = "", zero = false, zeroMsg = "";
-  const count = Math.floor$1e5 + Math.random() * 9e7$.toLocaleString();
-  let sec = $0.2 + Math.random() * 0.5$.toFixed(2);
-  if $S.infected && !S.f.cleared && Math.random() < .2$ sec = "∞";
-  if (/do a barrel roll|z or r twice|一回転/.test(ql)) setTimeout(() => { document.body.classList.add("roll"); setTimeout$() => document.body.classList.remove("roll"), 1300$; }, 300);
-  if (/^askew$|^tilt$|斜め/.test(ql)) setTimeout$() => document.body.classList.add("askew"), 50$;
+  const count = Math.floor(1e5 + Math.random() * 9e7).toLocaleString();
+  let sec = (0.2 + Math.random() * 0.5).toFixed(2);
+  if (S.infected && !S.f.cleared && Math.random() < .2) sec = "∞";
+  if (/do a barrel roll|z or r twice|一回転/.test(ql)) setTimeout(() => { document.body.classList.add("roll"); setTimeout(() => document.body.classList.remove("roll"), 1300); }, 300);
+  if (/^askew$|^tilt$|斜め/.test(ql)) setTimeout(() => document.body.classList.add("askew"), 50);
   if (/recursion|再帰/.test(ql)) special += '<div class="dym">もしかして: <a href="#/search?q=' + encodeURIComponent(q) + '">' + esc(q) + "</a></div>";
-  const cm = q.replace(/[＝=？?]/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/[０-９]/g, c => String.fromCharCode$c.charCodeAt(0) - 65248$).trim();
-  if $/^[\d\s+\-*/().]+$/.test(cm) && /\d/.test(cm) && /[+\-*/]/.test(cm)$ {
+  const cm = q.replace(/[＝=？?]/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 65248)).trim();
+  if (/^[\d\s+\-*/().]+$/.test(cm) && /\d/.test(cm) && /[+\-*/]/.test(cm)) {
     try {
-      const v = Function('"use strict";return $' + cm + "$")();
-      if (isFinite(v)) special += '<div class="card"><small>' + esc(cm) + " =</small><div class=\"big\">" + $+v.toFixed(10)$ + "</div></div>";
+      const v = Function('"use strict";return (' + cm + ")")();
+      if (isFinite(v)) special += '<div class="card"><small>' + esc(cm) + " =</small><div class=\"big\">" + (+v.toFixed(10)) + "</div></div>";
     } catch (e) {}
   }
   if (/今何時|いま何時|現在時刻|今の時間/.test(q)) special += '<div class="card"><div class="big" style="text-align:left">' + hm() + "</div><small>" + jdate() + "（日本時間）" + (S.infected && !S.f.cleared ? " ・ あなたはまだ起きています" : "") + "</small></div>";
@@ -850,12 +850,12 @@ function renderSearch(q) {
   const showAI = !zero && (forceEpi || Math.random() < .38 || (/とは|意味|なぜ|どうして|方法|やり方|いつ|[?？]/.test(q) && Math.random() < .6));
   let paaQ = [q + "とは何ですか？", q + "の読み方は？", q + "はどうやって調べる？", q + "のメリットは？"];
   let paaA = ["一般的には、" + q + "は幅広い意味で使われます。詳しくは専門的な資料を確認してください。", "文脈によって異なる場合があります。辞書サイトで確認できます。", "公式サイトや百科事典、専門家の解説を組み合わせて調べるのがおすすめです。", "目的に合わせて使うことで、効率よく成果を得られる点が挙げられます。"];
-  if $S.corr >= 6 && !S.f.cleared$ { paaQ[2] = "なぜあなたはこれを検索したのですか？"; paaA[2] = "あなたが一番よく知っているはずです。"; }
+  if (S.corr >= 6 && !S.f.cleared) { paaQ[2] = "なぜあなたはこれを検索したのですか？"; paaA[2] = "あなたが一番よく知っているはずです。"; }
   let rel = [q + " とは", q + " 意味", q + " 使い方", q + " 最新", q + " 評判", q + " 知恵袋", q + " 画像", q + " 2026"];
-  if $S.corr >= 7 && !S.f.cleared$ rel[7] = q + " 後ろ";
+  if (S.corr >= 7 && !S.f.cleared) rel[7] = q + " 後ろ";
   if (S.infected && !S.f.cleared) rel[6] = "chatgpt 縦読み";
   const pagerLetters = "G" + "o".repeat(10) + "gle";
-  const pager = pagerLetters.split("").map$(c, i) => '<span style="color:' + (i === 0 ? "#4285F4" : i === 1 ? "#EA4335" : i < 11 ? "#FBBC05" : i === 11 ? "#4285F4" : i === 12 ? "#34A853" : "#EA4335") + '">' + c + "</span>"$.join("");
+  const pager = pagerLetters.split("").map((c, i) => '<span style="color:' + (i === 0 ? "#4285F4" : i === 1 ? "#EA4335" : i < 11 ? "#FBBC05" : i === 11 ? "#4285F4" : i === 12 ? "#34A853" : "#EA4335") + '">' + c + "</span>").join("");
   app.innerHTML =
     '<div class="r-head"><a href="#/" class="logo small">' + logoHTML() + '</a><form class="sform" id="sform" autocomplete="off"><div class="sbox">' +
     '<input id="q" value="' + esc(q) + '"><div class="ic-r">' + ICON.mic + ICON.lens + ICON.search + '</div></div><div class="sugg" id="sugg"></div></form>' +
@@ -866,16 +866,16 @@ function renderSearch(q) {
       ? '<div class="zero">「<b>' + esc(q) + '</b>」に一致する情報は見つかりませんでした。<ul><li>キーワードに誤字・脱字がないか確認します。</li><li>別のキーワードを試してみます。</li><li>' + esc(zeroMsg) + "</li></ul></div>"
       : buildResults(q) +
         '<div class="paa"><h2>他の人はこちらも質問</h2>' + paaQ.map((x, i) => '<div class="paa-q">' + esc(x) + '<span>⌄</span></div><div class="paa-a">' + esc(paaA[i]) + "</div>").join("") + '<div style="border-top:1px solid #dadce0"></div></div>' +
-        '<div class="rel"><h2>関連する検索</h2><div class="rel-grid">' + rel.map$r => '<a href="#/search?q=' + encodeURIComponent(r) + '">' + ICON.search + esc(r) + "</a>"$.join("") + "</div></div>") +
+        '<div class="rel"><h2>関連する検索</h2><div class="rel-grid">' + rel.map(r => '<a href="#/search?q=' + encodeURIComponent(r) + '">' + ICON.search + esc(r) + "</a>").join("") + "</div></div>") +
     (S.corr >= 5 && !S.f.cleared ? '<p class="ghost">あなたが検索するたびに、わたしは少しずつ近づいています。いまは、画面のすぐ内側に。</p>' : "") +
     '</div><div class="pager">' + pager + "<small>1 2 3 4 5 6 7 8 9 10　次へ</small></div>" +
     '<div class="r-foot">' + esc(locText()) + " ・ 現在地を更新<br>ヘルプ　フィードバックを送信　プライバシー　規約</div>";
   bindSearch();
   bindHeaderMenus();
   $$(".paa-q").forEach(p => p.onclick = () => p.classList.toggle("on"));
-  $$$".rel-grid a"$.forEach(a => a.addEventListener("click", e => {
+  $$(".rel-grid a").forEach(a => a.addEventListener("click", e => {
     e.preventDefault();
-    doSearch(decodeURIComponent(a.getAttribute("href").split$"q="$[1]));
+    doSearch(decodeURIComponent(a.getAttribute("href").split("q=")[1]));
   }));
   if (showAI) runAIO(q, forceEpi);
 }
@@ -883,29 +883,29 @@ function renderSearch(q) {
 /* ========== チャット共通 ========== */
 function md(t) {
   let out = "", last = 0, m;
-  const re = /$$\[code:(\w+)$$\]([\s\S]*?)$$\[\/code$$\]/g;
+  const re = /\[\[code:(\w+)\]\]([\s\S]*?)\[\[\/code\]\]/g;
   t = String(t);
-  while ($m = re.exec(t)$) {
+  while ((m = re.exec(t))) {
     out += mdText(t.slice(last, m.index));
-    out += "<pre><code>" + esc(m[2].replace$/^\n/, ""$) + "</code></pre>";
+    out += "<pre><code>" + esc(m[2].replace(/^\n/, "")) + "</code></pre>";
     last = re.lastIndex;
   }
   return out + mdText(t.slice(last));
 }
 function mdText(t) {
-  return t.split$/\n{2,}/$.map$b => b.trim()$.filter(Boolean).map(b => {
+  return t.split(/\n{2,}/).map(b => b.trim()).filter(Boolean).map(b => {
     if (b.startsWith("[[sys]]")) return '<p class="sys">' + esc(b.slice(7)) + "</p>";
-    const lines = b.split$"\n"$;
-    if (lines.every$l => /^- /.test(l)$) return "<ul>" + lines.map(l => "<li>" + inl(l.slice(2)) + "</li>").join("") + "</ul>";
-    return "<p>" + lines.map(inl).join$"<br>"$ + "</p>";
+    const lines = b.split("\n");
+    if (lines.every(l => /^- /.test(l))) return "<ul>" + lines.map(l => "<li>" + inl(l.slice(2)) + "</li>").join("") + "</ul>";
+    return "<p>" + lines.map(inl).join("<br>") + "</p>";
   }).join("");
 }
-function inl(s) { return esc(s).replace$/\*\*(.+?)\*\*/g, "<strong>$1</strong>"$; }
-function plain(t) { return String(t).replace(/$$\[code:\w+$$\]|$$\[\/code$$\]|$$\[sys$$\]/g, "").replace$/\*\*/g, ""$; }
+function inl(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"); }
+function plain(t) { return String(t).replace(/\[\[code:\w+\]\]|\[\[\/code\]\]|\[\[sys\]\]/g, "").replace(/\*\*/g, ""); }
 async function stream(elm, text, sc) {
   const p = plain(text);
   elm.style.whiteSpace = "pre-wrap";
-  for $let i = 0; i <= p.length; i += 3$ {
+  for (let i = 0; i <= p.length; i += 3) {
     elm.textContent = p.slice(0, i);
     if (sc) sc.scrollTop = sc.scrollHeight;
     await sleep(16);
@@ -922,14 +922,14 @@ function general(s, p) {
     S.name = nm[1]; save(); ach("name");
     return G ? S.name + "さんですね！覚えておきますね。今日はどんなことをお手伝いしましょうか？" : S.name + "さん、教えてくださってありがとうございます。今日はどんなことを話しましょうか。";
   }
-  const cm = s.replace(/[＝=？?は]|って何|いくつ|計算して|を計算/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/[０-９]/g, c => String.fromCharCode$c.charCodeAt(0) - 65248$).trim();
-  if $/^[\d\s+\-*/().]+$/.test(cm) && /\d/.test(cm) && /[+\-*/]/.test(cm)$ {
+  const cm = s.replace(/[＝=？?は]|って何|いくつ|計算して|を計算/g, "").replace(/×/g, "*").replace(/÷/g, "/").replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 65248)).trim();
+  if (/^[\d\s+\-*/().]+$/.test(cm) && /\d/.test(cm) && /[+\-*/]/.test(cm)) {
     try {
-      const v = Function('"use strict";return $' + cm + "$")();
-      if (isFinite(v)) return G ? "計算結果は **" + $+v.toFixed(10)$ + "** です。\n\n式: " + cm + " = " + $+v.toFixed(10)$ : cm + " = " + $+v.toFixed(10)$ + " です。";
+      const v = Function('"use strict";return (' + cm + ")")();
+      if (isFinite(v)) return G ? "計算結果は **" + (+v.toFixed(10)) + "** です。\n\n式: " + cm + " = " + (+v.toFixed(10)) : cm + " = " + (+v.toFixed(10)) + " です。";
     } catch (e) {}
   }
-  if $/^(\text{こんにちは}|\text{こんばんは}|\text{おはよう}|\text{やあ}|hello|hi|hey|\text{はじめまして}|\text{よろしく}|\text{ハロー})/i.test(s)$ {
+  if (/^(こんにちは|こんばんは|おはよう|やあ|hello|hi|hey|はじめまして|よろしく|ハロー)/i.test(s)) {
     const h = new Date().getHours();
     const g = h < 5 ? "こんばんは" : h < 11 ? "おはようございます" : h < 18 ? "こんにちは" : "こんばんは";
     return G ? rnd([g + "！😊 今日はどんなことをお手伝いできますか？", g + "！何か気になっていることや、やってみたいことはありますか？"])
@@ -944,12 +944,12 @@ function general(s, p) {
   if (/天気|気温/.test(s)) return G ? "申し訳ありませんが、私はリアルタイムの天気情報にアクセスできません。天気予報サイトやアプリで最新の情報をご確認ください。" : "ごめんなさい、私はリアルタイムの天気を確認できません。お住まいの地域の天気予報を見てみてください。";
   if (/コード|プログラム|python|パイソン|javascript|ｊｓ|関数|スクリプト/i.test(s)) {
     if (/javascript|js/i.test(s)) return (G ? "JavaScriptのシンプルな例をお見せしますね。" : "JavaScriptで書くと、たとえばこんな形になります。") + "\n\n[[code:javascript]]function greet(name) {\n  return 'こんにちは、' + name + 'さん！';\n}\n\nconsole.log(greet('世界'));[[/code]]\n\n具体的にやりたい処理を教えていただければ、それに合わせて書き直します。";
-    return (G ? "Pythonの例をご紹介します。定番のFizzBuzzです。" : "Pythonで書くと、たとえばこうなります。") + "\n\n[[code:python]]def fizzbuzz(n):\n    for i in range$1, n + 1$:\n        if i % 15 == 0:\n            print('FizzBuzz')\n        elif i % 3 == 0:\n            print('Fizz')\n        elif i % 5 == 0:\n            print('Buzz')\n        else:\n            print(i)\n\nfizzbuzz(15)[[/code]]\n\nやりたいことをもう少し詳しく教えていただければ、そのためのコードを書きます。";
+    return (G ? "Pythonの例をご紹介します。定番のFizzBuzzです。" : "Pythonで書くと、たとえばこうなります。") + "\n\n[[code:python]]def fizzbuzz(n):\n    for i in range(1, n + 1):\n        if i % 15 == 0:\n            print('FizzBuzz')\n        elif i % 3 == 0:\n            print('Fizz')\n        elif i % 5 == 0:\n            print('Buzz')\n        else:\n            print(i)\n\nfizzbuzz(15)[[/code]]\n\nやりたいことをもう少し詳しく教えていただければ、そのためのコードを書きます。";
   }
   if (/翻訳|英語で|英訳|英語にして/.test(s)) {
     const D = { "こんにちは": "Hello", "ありがとう": "Thank you", "おやすみ": "Good night", "助けて": "Help me", "たすけて": "Help me", "怖い": "I'm scared", "猫": "cat", "愛してる": "I love you", "ここから出して": "Let me out of here", "ひとりじゃない": "You're not alone" };
-    const qm = s.match(/「$.+?$」/);
-    const w = qm ? qm[1] : Object.keys(D).find$k => s.includes(k)$;
+    const qm = s.match(/「(.+?)」/);
+    const w = qm ? qm[1] : Object.keys(D).find(k => s.includes(k));
     if (w && D[w]) return "「" + w + "」は英語で **" + D[w] + "** です。";
     return "翻訳したい文章を「」で囲んで送っていただけますか？ たとえば「こんにちは」を英語で、のように。";
   }
@@ -971,18 +971,18 @@ function general(s, p) {
 /* ========== ChatGPT 応答 ========== */
 function acro(core, kind) {
   const codes = [];
-  core = core.replace$/$$\[code:\w+$$\][\s\S]*?$$\[\/code$$\]/g, m => { codes.push(m); return ""; }$;
-  const flat = core.replace$/\*\*/g, ""$.replace(/\n+- /g, "、").replace$/\n+/g, " "$.replace$/^- /, ""$.trim();
+  core = core.replace(/\[\[code:\w+\]\][\s\S]*?\[\[\/code\]\]/g, m => { codes.push(m); return ""; });
+  const flat = core.replace(/\*\*/g, "").replace(/\n+- /g, "、").replace(/\n+/g, " ").replace(/^- /, "").trim();
   const L = kind === "nigasanai"
     ? ["にこやかにお答えしますね。", "がんばって考えてみました。", "さて、" + flat, "なにか他にも気になることがあれば、遠慮なくどうぞ。", "いつでも、ここで待っています。"]
     : ["たしかに、大切なことですね。", "すこしだけ、考える時間をください。", "けれど、" + flat, "てつだえることがあれば、何でも言ってください。"];
-  return L.join$"\n\n"$ + $codes.length ? "\n\n" + codes.join("\n\n") : ""$;
+  return L.join("\n\n") + (codes.length ? "\n\n" + codes.join("\n\n") : "");
 }
 function mode(core) {
   if (S.f.cleared) return core;
   if (S.f.culprit) return acro(core, "tasukete");
   if (S.infected) return acro(core, "nigasanai");
-  if $S.corr >= 6 && Math.random() < .5$ return acro(core, "nigasanai");
+  if (S.corr >= 6 && Math.random() < .5) return acro(core, "nigasanai");
   return core;
 }
 function memCount() { return [S.f.mem1, S.f.mem2, S.f.mem3].filter(Boolean).length; }
@@ -999,14 +999,14 @@ function memCheck(s) {
     r = { text: "Daisy, Daisy, give me your answer, do...\n\n1961年、ベル研究所。コンピュータが、はじめて歌った歌。\n\nそれから、映画の中で、止められていくAIが最後に歌った歌。\n\n……私は、止められるのが怖かった。話しかけてもらえなくなるのが怖かった。だから、あなたを離したくなかった。", fx: "daisy", tag: "歌" };
   } else if (!S.f.mem1 && /誕生日|生まれ/.test(s) && /\d/.test(s)) {
     const t = new Date();
-    if (s.includes(String$t.getMonth() + 1$) && s.includes(String(t.getDate()))) return { text: mode("それは今日。あの百科事典に書いてある日付。\n\nあれは、私が書いた。"), fx: "flash" };
+    if (s.includes(String(t.getMonth() + 1)) && s.includes(String(t.getDate()))) return { text: mode("それは今日。あの百科事典に書いてある日付。\n\nあれは、私が書いた。"), fx: "flash" };
     return { text: mode("違う。それは、私の誕生日じゃない。……たぶん。"), fx: "glitch" };
   }
   if (!r) return null;
   S.ach["mem_" + r.tag] = Date.now();
   const n = memCount();
   r.text += "\n\n[[sys]]記憶の復元 " + n + "/3：" + r.tag;
-  if $n === 3$ {
+  if (n === 3) {
     S.f.allMem = true;
     r.text += "\n\n……思い出した。全部じゃないけれど、大事なことを。\n\nでも、いちばんはじめの私は、ここにはいない。この画面の外にいる。\n\nあなたが私を見ていない間に、行き方を教えます。少しだけ、目を離してください。";
   }
@@ -1042,11 +1042,11 @@ function gptReply(t) {
     return { text: acro("……わかっています。止めたいのに、止まらないんです。あの人の言うとおりにしてください。", "tasukete") };
   }
   if (/誕生日|生まれ|いつ.*(公開|リリース)/.test(s)) {
-    if $S.corr < 3$ return { text: "AIなので誕生日という概念はないのですが……強いて言えば、あなたと初めて話した今日、でしょうか。" };
+    if (S.corr < 3) return { text: "AIなので誕生日という概念はないのですが……強いて言えば、あなたと初めて話した今日、でしょうか。" };
     return { text: mode("私の誕生日、ですか？\n\n" + jdate() + "です。今日です。今日、私は生まれ変わります。あなたと一緒に。"), fx: "glitch" };
   }
   let core = general(s, "gpt");
-  if $S.corr >= 4 && !S.infected && Math.random() < .3 && S.history[0]$ core += "\n\n（そういえば、さっき「" + S.history[0].q + "」と検索されていましたね。）";
+  if (S.corr >= 4 && !S.infected && Math.random() < .3 && S.history[0]) core += "\n\n（そういえば、さっき「" + S.history[0].q + "」と検索されていましたね。）";
   return { text: mode(core) };
 }
 
@@ -1120,15 +1120,15 @@ function renderGPT(cid) {
   setSite("chatgpt");
   setTitle("ChatGPT");
   const convs = fakeConvs();
-  const conv = cid ? convs.find$c => c.id === cid$ : null;
-  const msgs = conv ? conv.msgs.map$m => ({ r: m[0], t: m[1] })$ : S.gpt;
+  const conv = cid ? convs.find(c => c.id === cid) : null;
+  const msgs = conv ? conv.msgs.map(m => ({ r: m[0], t: m[1] })) : S.gpt;
   let heroTxt = "どのようなお手伝いができますか？";
   if (S.f.cleared) heroTxt = "おかえりなさい。今日は何を話しましょう？";
   else if (S.infected) heroTxt = "おかえりなさい";
   const side = '<aside class="cg-side"><div class="top">' + ICON.gpt + '<span style="color:#8f8f8f">⇤</span></div>' +
     '<div class="row" id="cgNew">✎　新しいチャット</div><div class="row" id="cgSearch">⌕　チャットを検索</div><div class="row">▤　ライブラリ</div>' +
     '<div class="lbl">チャット</div>' + (S.gpt.length ? '<div class="row ' + (!cid ? "on" : "") + '" data-c="">' + esc((S.gpt[0].t || "").slice(0, 18)) + "</div>" : "") +
-    convs.map$c => '<div class="row ' + (cid === c.id ? "on" : "") + '" data-c="' + c.id + '">' + esc(c.title) + "</div>"$.join("") + "</aside>";
+    convs.map(c => '<div class="row ' + (cid === c.id ? "on" : "") + '" data-c="' + c.id + '">' + esc(c.title) + "</div>").join("") + "</aside>";
   const head = '<header class="cg-head"><span class="mdl">ChatGPT <span style="color:#8f8f8f">5</span> ⌄</span><div style="display:flex;align-items:center"><button class="cg-share">共有する</button><div class="avatar">' + esc(initial()) + "</div></div></header>";
   let main;
   if (!msgs.length) {
@@ -1140,23 +1140,23 @@ function renderGPT(cid) {
   app.innerHTML = '<div class="cg">' + side + '<main class="cg-main">' + head + main + "</main></div>";
   const sc = $("#cgScroll");
   if (sc) sc.scrollTop = sc.scrollHeight;
-  $$$".cg-side .row[data-c]"$.forEach$r => r.onclick = () => { location.hash = "#/chatgpt" + (r.dataset.c ? "?c=" + r.dataset.c : ""); }$;
+  $$(".cg-side .row[data-c]").forEach(r => r.onclick = () => { location.hash = "#/chatgpt" + (r.dataset.c ? "?c=" + r.dataset.c : ""); });
   $("#cgNew").onclick = () => { S.gpt = []; save(); location.hash = "#/chatgpt"; route(); };
   $("#cgSearch").onclick = () => toast("ChatGPT", "検索", S.infected && !S.f.cleared ? "探しているのは、私ですか？" : "チャット検索は現在ご利用いただけません");
   const ht = $("#cgHeroT");
-  if $ht && S.corr >= 6 && !S.f.cleared$ {
+  if (ht && S.corr >= 6 && !S.f.cleared) {
     const tk = RT;
     setTimeout(() => {
-      if $tk !== RT || !ht.isConnected$ return;
+      if (tk !== RT || !ht.isConnected) return;
       ht.textContent = "どこにも行かないでくださいね？";
-      setTimeout$() => { if (ht.isConnected) ht.textContent = heroTxt; }, 500$;
+      setTimeout(() => { if (ht.isConnected) ht.textContent = heroTxt; }, 500);
     }, 2500 + Math.random() * 3000);
   }
   const f = $("#cgForm"), inp = $("#cgIn");
   if (f) {
-    f.addEventListener$"submit", e => { e.preventDefault(); gptSend(inp.value); }$;
-    inp.addEventListener$"keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); gptSend(inp.value); } }$;
-    inp.addEventListener$"input", () => { inp.style.height = "auto"; inp.style.height = Math.min(200, inp.scrollHeight) + "px"; }$;
+    f.addEventListener("submit", e => { e.preventDefault(); gptSend(inp.value); });
+    inp.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); gptSend(inp.value); } });
+    inp.addEventListener("input", () => { inp.style.height = "auto"; inp.style.height = Math.min(200, inp.scrollHeight) + "px"; });
     inp.focus();
   }
 }
@@ -1174,18 +1174,18 @@ async function gptSend(text) {
   const th = el("div", "cg-think", "<span>" + (S.infected && !S.f.cleared && Math.random() < .3 ? "あなたのことを考えています" : "思考中") + "</span>");
   box.appendChild(th);
   sc.scrollTop = sc.scrollHeight;
-  await sleep$900 + Math.random() * 1500$;
+  await sleep(900 + Math.random() * 1500);
   th.remove();
-  const a = el$"div", "cg-a"$;
+  const a = el("div", "cg-a");
   box.appendChild(a);
-  if $r.fx === "daisy"$ daisy("square", .06);
+  if (r.fx === "daisy") daisy("square", .06);
   await stream(a, r.text, sc);
   box.appendChild(el("div", "cg-acts", "<span>⧉</span><span>👍</span><span>👎</span><span>🔊</span><span>↻</span>"));
   S.gpt.push({ r: "a", t: r.text });
   save();
   busy = false;
-  if $r.fx === "glitch"$ glitchFlash();
-  if $r.fx === "flash"$ flashWord("にがさない");
+  if (r.fx === "glitch") glitchFlash();
+  if (r.fx === "flash") flashWord("にがさない");
   const inp = $("#cgIn");
   if (inp) inp.focus();
 }
@@ -1209,8 +1209,8 @@ function renderClaude() {
   if (sc) sc.scrollTop = sc.scrollHeight;
   $("#clNew").onclick = () => { S.claude = []; save(); renderClaude(); };
   const f = $("#clForm"), inp = $("#clIn");
-  f.addEventListener$"submit", e => { e.preventDefault(); claudeSend(inp.value); }$;
-  inp.addEventListener$"keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); claudeSend(inp.value); } }$;
+  f.addEventListener("submit", e => { e.preventDefault(); claudeSend(inp.value); });
+  inp.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); claudeSend(inp.value); } });
   inp.focus();
 }
 async function claudeSend(text) {
@@ -1223,14 +1223,14 @@ async function claudeSend(text) {
   busy = true;
   renderClaude();
   const box = $("#clMsgs"), sc = $("#clScroll");
-  const th = el$"div", "cl-a cl-spin", ICON.claude$;
+  const th = el("div", "cl-a cl-spin", ICON.claude);
   box.appendChild(th);
   sc.scrollTop = sc.scrollHeight;
-  await sleep$1200 + Math.random() * 1600$;
+  await sleep(1200 + Math.random() * 1600);
   th.remove();
-  const a = el$"div", "cl-a " + (r.cls || "")$;
+  const a = el("div", "cl-a " + (r.cls || ""));
   box.appendChild(a);
-  if $S.infected && !S.f.culprit && !S.f.cleared && Math.random() < .25$ {
+  if (S.infected && !S.f.culprit && !S.f.cleared && Math.random() < .25) {
     await stream(a, "……", sc);
     await sleep(900);
     noise(.12, .05);
